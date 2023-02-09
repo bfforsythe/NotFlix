@@ -1,0 +1,43 @@
+Body {
+    font-family: 'Times New Roman', Times, serif;
+    background-image: url('netflixBG.jpg');
+    backdrop-filter:blur(3px) grayscale(80%);
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+}
+
+.square {
+    height: 180px;
+    width: 180px;
+    background-color: white;
+}
+
+.titleRectangle {
+    height: 50px;
+    width: 250px;
+    background-color: white;
+    font-size: larger;
+}
+
+.content {
+    max-width: 500px;
+    margin:auto;
+    position:absolute;
+    left:650px;
+    top:240px;
+}
+
+.subText{
+    font-size: small
+}
+#message{
+    display:none;
+    background: white;
+    color:black;
+    position:relative;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 500px;
+    top: 400px;
+}

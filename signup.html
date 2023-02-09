@@ -1,0 +1,62 @@
+<html>
+
+<head>
+    <title>Notflix Registration</title>
+    <link rel="stylesheet" href="stylesheet.css"> </link>
+</head>
+
+<body>
+    <div class="passwordReqs"> </div>    
+    <div class="content">   
+ 
+<form>
+
+    <div class="square">
+    <div class="container">
+        <label> Username: </label>
+        <input type="text" placeholder="Create a Username" name="username" required>
+        <br>
+        <label for="psw">Password</label>
+        <input type="password" id="psw" name="psw">
+    </div>
+    </div>
+</form>
+</div>
+
+
+  <div id="message">
+    <h3>Password must contain the following:</h3>
+    <p id="letter" class="invalid">A <b>lowercase</b> letter</p>
+    <p id="capital" class="invalid">A <b>capital (uppercase)</b> letter</p>
+    <p id="number" class="invalid">A <b>number</b></p>
+    <p id="length" class="invalid">Minimum <b>8 characters</b></p>
+  </div>
+
+
+<script>
+    var myInput = document.getElementById("psw");
+    var letter = document.getElementById("letter");
+    var capital = document.getElementById("capital");
+    var number = document.getElementById("number");
+    var length = document.getElementById("length");
+
+myInput.onfocus = function() {
+  document.getElementById("message").style.display = "block";
+}
+
+myInput.onblur = function() {
+  document.getElementById("message").style.display = "none";
+}
+</script>
+
+
+
+</body>
+
+
+
+
+
+</html>
+
+

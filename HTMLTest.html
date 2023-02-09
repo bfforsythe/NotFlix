@@ -1,0 +1,61 @@
+<html>
+
+
+<head>
+    <title>NotFlix Login</title>
+    <link rel="stylesheet" href="stylesheet.css"> </link>
+</head>
+
+<body>
+
+    <div class="content">
+        <center>
+            <div class="titleRectangle">
+                <h1> NotFlix Login </h1>
+            </div>
+        <form>
+                <div class="square">
+                    <div class="container">
+
+                        <label> Username: </label>
+                        <input type="text" placeholder="Enter Username" id="username" name="username" required>
+                        <br>
+                        <label>Password: </label>
+                        <input type="password" placeholder="Enter Password" id="password" name="password" required>
+
+                        <br>
+                        <button onClick="grabCredentials()" type="button"> Login</button>
+                        <input type="checkbox" check="checked"> Remember Me
+                        
+                        <br><br>
+                        <div class="subText"> New to Notflix?: <a href="./signup.html"> Sign up</a></div>
+                    </div>
+                </div>
+        </form>
+    </div>
+</center>
+</body>
+
+
+<script>
+
+
+
+    function grabCredentials() {
+        var nameTxt = document.getElementById("username");
+        var passTxt = document.getElementById("password");
+        var credentials = [["user","pass"]];
+        if (nameTxt.value == credentials[0][0] && passTxt.value == credentials[0][1]){
+            console.log("Success");
+        }else{
+            console.log("Fail");
+        }
+        nameTxt.value = "";
+        passTxt.value = "";
+    }
+
+
+</script>
+
+
+</html>
