@@ -8,24 +8,22 @@
 
 <body>
 
-  <div class="wrapper">
-    <div class="centered">
-      <div class="passwordReqs"> </div>
-      <form>
+  <div class="wrapper"> <!-- Set Wrapper Class for centering-->
+    <form>
 
-        <div class="square">
-          <div class="container">
-            <label> Username: </label>
-            <input type="text" placeholder="Create a Username" name="username" required>
-            <br>
-            <label for="psw">Password</label>
-            <input type="password" id="psw" name="psw">
-          </div>
-        </div>
-    </div>
+      <!-- Create username and password box -->
+
+      <div class="square">
+        <label> Username: </label>
+        <input type="text" placeholder="Create a Username" name="username" required>
+        <br>
+        <label for="psw" placeholder="Create a Password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">Password</label>
+        <input type="password" id="psw" name="psw">
+      </div>
+
     </form>
-  </div>
 
+      <!-- Create password req box, set to appear when clicked-->
 
   <div id="message">
     <h3>Password must contain the following:</h3>
@@ -34,7 +32,9 @@
     <p id="number" class="invalid">A <b>number</b></p>
     <p id="length" class="invalid">Minimum <b>8 characters</b></p>
   </div>
+</div>
 
+    <!-- End HTML, begin JS -->
 
   <script>
     var myInput = document.getElementById("psw");
@@ -49,6 +49,48 @@
 
     myInput.onblur = function () {
       document.getElementById("message").style.display = "none";
+    }
+
+    myInput.onkeyup = function() {
+      var lowerCaseLetters = /[a-z]/g;
+
+      if(myInput.value.match(lowerCaseLetters)){
+        letter.classList.remove("invalid");
+        letter.classList.add("valid");
+      } else{
+        letter.classList.remove("valid");
+        letter.classList.add("invalid");
+      }
+// ---------------------------------------------------
+
+      var upperCaseLetters = /[A-Z]/g;
+
+      if(myInput.value.match(upperCaseLetters)){
+        capital.classList.remove("invalid");
+        capital.classList.add("valid");
+      } else{
+        capital.classList.remove("valid");
+        capital.classList.add("invalid");
+      }
+// --------------------------------------------------
+
+      var numbers = /[0-9]/g;
+
+      if(myInput.value.match(numbers)){
+        number.classList.remove("invalid");
+        number.classList.add("valid");
+      } else{
+        number.classList.remove("valid");
+        number.classList.add("invalid");
+      }
+
+      if(myInput.value.length >= 8){
+        length.classList.remove("invalid");
+        length.classList.add("valid");
+      } else{
+        length.classList.remove("valid");
+        length.classList.add("invalid");
+      }
     }
   </script>
 

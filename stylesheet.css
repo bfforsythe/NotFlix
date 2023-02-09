@@ -1,7 +1,6 @@
 Body {
-    font-family: 'Times New Roman', Times, serif;
+    font-family: "Comic Sans MS", "Comic Sans", cursive;
     background-image: url('netflixBG.jpg');
-    backdrop-filter:blur(3px) grayscale(80%);
     background-repeat: no-repeat;
     background-size: cover;
     display: flex;
@@ -22,7 +21,8 @@ Body {
 
 .wrapper {
     margin: 0 auto;
-    margin-top: 20%;
+    margin-top: 200px;
+
 }
 
 .subText{
@@ -36,5 +36,23 @@ Body {
     padding: 10px;
     margin-top: 10px;
     margin-bottom: 500px;
-    top: 400px;
+
+}
+
+.valid{
+    color:green;
+}
+.valid:before {
+    position:relative;
+    left: -35px;
+    content: "✔️";
+}
+
+.invalid{
+    color:red;
+}
+.invalid:before {
+    position: relative;
+    left: -35px;
+    content: '❌' ;
 }
