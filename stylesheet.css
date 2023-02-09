@@ -20,12 +20,9 @@ Body {
     font-size: larger;
 }
 
-.content {
-    max-width: 500px;
-    margin:auto;
-    position:absolute;
-    left:650px;
-    top:240px;
+.wrapper {
+    margin: 0 auto;
+    margin-top: 20%;
 }
 
 .subText{

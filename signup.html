@@ -1,27 +1,30 @@
 <html>
 
 <head>
-    <title>Notflix Registration</title>
-    <link rel="stylesheet" href="stylesheet.css"> </link>
+  <title>Notflix Registration</title>
+  <link rel="stylesheet" href="stylesheet.css">
+  </link>
 </head>
 
 <body>
-    <div class="passwordReqs"> </div>    
-    <div class="content">   
- 
-<form>
 
-    <div class="square">
-    <div class="container">
-        <label> Username: </label>
-        <input type="text" placeholder="Create a Username" name="username" required>
-        <br>
-        <label for="psw">Password</label>
-        <input type="password" id="psw" name="psw">
+  <div class="wrapper">
+    <div class="centered">
+      <div class="passwordReqs"> </div>
+      <form>
+
+        <div class="square">
+          <div class="container">
+            <label> Username: </label>
+            <input type="text" placeholder="Create a Username" name="username" required>
+            <br>
+            <label for="psw">Password</label>
+            <input type="password" id="psw" name="psw">
+          </div>
+        </div>
     </div>
-    </div>
-</form>
-</div>
+    </form>
+  </div>
 
 
   <div id="message">
@@ -33,21 +36,21 @@
   </div>
 
 
-<script>
+  <script>
     var myInput = document.getElementById("psw");
     var letter = document.getElementById("letter");
     var capital = document.getElementById("capital");
     var number = document.getElementById("number");
     var length = document.getElementById("length");
 
-myInput.onfocus = function() {
-  document.getElementById("message").style.display = "block";
-}
+    myInput.onfocus = function () {
+      document.getElementById("message").style.display = "block";
+    }
 
-myInput.onblur = function() {
-  document.getElementById("message").style.display = "none";
-}
-</script>
+    myInput.onblur = function () {
+      document.getElementById("message").style.display = "none";
+    }
+  </script>
 
 
 
@@ -58,5 +61,3 @@ myInput.onblur = function() {
 
 
 </html>
-
-
