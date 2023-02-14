@@ -22,7 +22,7 @@
                     <input type="password" placeholder="Enter Password" id="password" name="password" required>
 
                     <br>
-                    <button onClick="grabCredentials()" type="button"> Login</button>
+                    <button onClick="grabCredentialsV2()" type="submit"> Login</button>
                     <input type="checkbox" check="checked"> Remember Me
 
                     <br><br>
@@ -50,6 +50,19 @@
         passTxt.value = "";
     }
 
+    function grabCredentialsV2() {
+        var nameTxt = document.getElementById("username");
+        var passTxt = document.getElementById("password");
+        var users = []
+        var credentials = {username:"user", password:"pass"}
+        if (nameTxt.value == credentials.username && passTxt.value == credentials.password) {
+            console.log("Success");
+        } else {
+            console.log("Fail");
+        }
+        nameTxt.value = "";
+        passTxt.value = "";
+    }
 </script>
 
 
