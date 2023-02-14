@@ -53,7 +53,7 @@
     function grabCredentialsV2() {
         var nameTxt = document.getElementById("username");
         var passTxt = document.getElementById("password");
-        var users = []
+        var users = [{username:"user", password:"pass"},{}]
         var credentials = {username:"user", password:"pass"}
         if (nameTxt.value == credentials.username && passTxt.value == credentials.password) {
             console.log("Success");
