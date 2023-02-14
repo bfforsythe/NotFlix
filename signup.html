@@ -6,6 +6,15 @@
   </link>
 </head>
 
+<style>
+
+.signupButton{
+  padding: 10px 24px;
+  margin-top: 15px;
+}
+
+</style>
+
 <body>
 
   <div class="wrapper"> <!-- Set Wrapper Class for centering-->
@@ -15,10 +24,14 @@
 
       <div class="square">
         <label> Username: </label>
-        <input type="text" placeholder="Create a Username" name="username" required>
+        <input type="text" placeholder="Create a Username" id="username" name="username" required>
         <br>
-        <label for="psw" placeholder="Create a Password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">Password</label>
+        <label for="psw" placeholder="Create a Password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required>Password</label>
         <input type="password" id="psw" name="psw">
+
+        <center>
+          <button class ="signupButton" onClick="storeUserPass()" type="button"> Sign Up</button>
+       </center>
       </div>
 
     </form>
@@ -84,12 +97,26 @@
         number.classList.add("invalid");
       }
 
+// -------------------------------------------------
       if(myInput.value.length >= 8){
         length.classList.remove("invalid");
         length.classList.add("valid");
       } else{
         length.classList.remove("valid");
         length.classList.add("invalid");
+      }
+    }
+
+
+// ----------Begin Username/Password Saving Function-------
+
+    function storeUserPass() {
+      var nameTxt;
+      var passTxt;
+      nameTxt = document.getElementById("username").value;
+      passTxt = document.getElementById('psw').value;
+      if(nameTxt != "" && passTxt != ""){
+      console.log(nameTxt , passTxt);
       }
     }
   </script>
