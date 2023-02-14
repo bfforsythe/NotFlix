@@ -22,7 +22,7 @@
                     <input type="password" placeholder="Enter Password" id="password" name="password" required>
 
                     <br>
-                    <button onClick="grabCredentialsV2()" type="submit"> Login</button>
+                    <button onClick="grabCredentialsV3()" type="submit"> Login</button>
                     <input type="checkbox" check="checked"> Remember Me
 
                     <br><br>
@@ -53,13 +53,43 @@
     function grabCredentialsV2() {
         var nameTxt = document.getElementById("username");
         var passTxt = document.getElementById("password");
-        var users = [{username:"user", password:"pass"},{}]
-        var credentials = {username:"user", password:"pass"}
-        if (nameTxt.value == credentials.username && passTxt.value == credentials.password) {
-            console.log("Success");
-        } else {
-            console.log("Fail");
+        var credentials = [{username:"user", password:"pass"},{username:"abc", password:"123"},{username:"cat", password:"mouse"},{username:"guy", password:"guy"}]
+        var loggedInUser = "";
+        for (let u in credentials){
+            if(nameTxt.value == credentials[u].username && passTxt.value == credentials[u].password){
+                loggedInUser = credentials[u].username;
+                break;
+            }
         }
+        if(loggedInUser != ""){
+            console.log(loggedInUser + " logged in");
+        }else{
+            console.log("error logging in");
+        }
+        nameTxt.value = "";
+        passTxt.value = "";
+    }
+
+    function grabCredentialsV3() {
+        var nameTxt = document.getElementById("username");
+        var passTxt = document.getElementById("password");
+        var credentials = {
+            user:"pass",
+            abc:"123",
+            cat:"mouse",
+            guy:"guy",
+        }
+        if(credentials[nameTxt.value] != undefined){
+            if(credentials[nameTxt.value] == passTxt.value){
+                console.log(nameTxt.value + " logged in");
+            }else{
+                console.log("error logging in");
+            }
+        }else{
+            console.log('no such user');
+        }
+
+
         nameTxt.value = "";
         passTxt.value = "";
     }
