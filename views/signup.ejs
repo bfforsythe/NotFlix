@@ -2,9 +2,8 @@
 
 <head>
   <title>Notflix Registration</title>
-  <link rel="stylesheet" href="stylesheet.css">
-  </link>
 </head>
+<%- include('./partials/head.ejs') %>
 
 <style>
 
@@ -16,6 +15,7 @@
 </style>
 
 <body>
+    <%- include('./partials/nav.ejs') %>
 
   <div class="wrapper"> <!-- Set Wrapper Class for centering-->
     <form>
@@ -46,6 +46,7 @@
     <p id="length" class="invalid">Minimum <b>8 characters</b></p>
   </div>
 </div>
+<%- include('./partials/footer.ejs') %>
 
     <!-- End HTML, begin JS -->
 

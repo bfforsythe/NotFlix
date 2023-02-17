@@ -3,16 +3,17 @@
 
 <head>
     <title>NotFlix Login</title>
-    <link rel="stylesheet" href="stylesheet.css">
-    </link>
 </head>
+<%- include('./partials/head.ejs') %>
 
 <body>
+    <%- include('./partials/nav.ejs') %>
+
     <div class="wrapper">
         <div class="titleRectangle">
-            <h1> NotFlix Login </h1>
+            <h1> NotFlix Login</h1>
         </div>
-        <form>
+        <form action="/login" method="post">
             <div class="square">
 
                     <label> Username: </label>
@@ -26,16 +27,20 @@
                     <input type="checkbox" check="checked"> Remember Me
 
                     <br><br>
-                    <div class="subText"> New to Notflix?: <a href="./signup.html"> Sign up</a></div>
+                    <!--  div class="subText"> New to Notflix?: <a href="./signup.html"> Sign up</a></div>  -->
+                    <nav>
+                        <a href="/signup">Sign up</a>
+                    </nav>
             </div>
         </form>
     </div>
+    
+    <%- include('./partials/footer.ejs') %>
 </body>
 
-
 <script>
-
-
+    import credJson from "./credentials.json" assert {type: 'JSON'}
+    console.log(credJson)
 
     function grabCredentials() {
         var nameTxt = document.getElementById("username");

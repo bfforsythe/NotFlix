@@ -1,0 +1,62 @@
+<head>
+    <style>
+        Body {
+            font-family: "Comic Sans MS", "Comic Sans", cursive;
+            background-image: url('netflixBG.jpg');
+            background-repeat: no-repeat;
+            background-size: cover;
+            display: flex;
+        }
+
+        .square {
+            height: 180px;
+            width: 180px;
+            background-color: white;
+        }
+
+        .titleRectangle {
+            height: 50px;
+            width: 250px;
+            background-color: white;
+            font-size: larger;
+        }
+
+        .wrapper {
+            margin: 0 auto;
+            margin-top: 200px;
+
+        }
+
+        .subText{
+            font-size: small
+        }
+        #message{
+            display:none;
+            background: white;
+            color:black;
+            position:relative;
+            padding: 10px;
+            margin-top: 10px;
+            margin-bottom: 500px;
+
+        }
+
+        .valid{
+            color:green;
+        }
+        .valid:before {
+            position:relative;
+            left: -35px;
+            content: "✔️";
+        }
+
+        .invalid{
+            color:red;
+        }
+        .invalid:before {
+            position: relative;
+            left: -35px;
+            content: '❌' ;
+        }
+    </style>
+</head>
