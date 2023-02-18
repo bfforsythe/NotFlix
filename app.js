@@ -20,12 +20,19 @@ app.get('/', (req, res) =>{
 });
 
 app.post('/login', (req,res)=>{
+    // read file for now and save username and password
     console.log(req.body.username + " logged in");
     res.redirect('/');
 });
 
 app.get('/signup', (req, res) =>{
     res.render('signup');
+});
+
+app.post('/createUser', (req,res)=>{
+    // write to saved file a new user
+    console.log(req.body.username + " signed up");
+    res.redirect('/');
 });
 
 app.get('/sign-up',(req,res) =>{
