@@ -32,9 +32,8 @@
         <input type="text" placeholder="Create a Username" id="username" name="username" pattern="(?=.*\d)(?=.*[a-z])(?=.*[@$!%*?&])(?=.*[A-Z]).{8,}" required>
         <label> Email: </label>
         <input type="text" placeholder="Enter your email" id="email" name="email" required>
-        <br>
-        <label for="password" placeholder="Create a Password">Password</label>
-        <input type="password" id="password" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[@$!%*?&])(?=.*[A-Z]).{10,}" required>
+        <label>Password:</label>
+        <input type="password" placeholder="Create a Password" id="password" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[@$!%*?&])(?=.*[A-Z]).{10,}" required>
 
         <center>
           <button class ="signupButton" onClick="storeUserPass()" type="submit"> Sign Up</button>
@@ -45,35 +44,122 @@
 
       <!-- Create password req box, set to appear when clicked-->
 
-  <div id="message">
+  <div id="passMessage">
     <h3>Password must contain the following:</h3>
     <p id="letter" class="invalid">A <b>lowercase</b> letter</p>
     <p id="capital" class="invalid">A <b>capital (uppercase)</b> letter</p>
     <p id="number" class="invalid">A <b>number</b></p>
-    <p id="length" class="invalid">Minimum <b>8 characters</b></p>
+    <p id="specialChar" class="invalid"><b> A special character</b></p>
+    <p id="length" class="invalid">Minimum <b>10 characters</b></p>
   </div>
+
+    <!-- Create username req box, set to appear wehen clicked--> 
+
+
+  <div id="userMessage">
+    <h3>Username must contain the following:</h3>
+    <p id="usercapital" class="invalid">A <b>capital (uppercase)</b> letter</p>
+    <p id="usernumber" class="invalid">A <b>number</b></p>
+    <p id="userspecialChar" class="invalid"><b> A special character</b></p>
+    <p id="userlength" class="invalid">Minimum <b>8 characters</b></p> 
+  </div>
+
 </div>
+
+
 <%- include('./partials/footer.ejs') %>
 
     <!-- End HTML, begin JS -->
 
   <script>
+
     var myInput = document.getElementById("password");
     var letter = document.getElementById("letter");
     var capital = document.getElementById("capital");
     var number = document.getElementById("number");
     var length = document.getElementById("length");
+    var specialChar = document.getElementById("specialChar");
+
+    var userInput = document.getElementById("username");
+    var usercapital = document.getElementById("usercapital");
+    var usernumber = document.getElementById("usernumber");
+    var userlength = document.getElementById("userlength");
+    var userspecialChar = document.getElementById("userspecialChar");
+
+    var numbers = /[0-9]/g;
+    var specialChars =/["@","$","!","%","?","&"]/
+    var lowerCaseLetters = /[a-z]/g;
+    var upperCaseLetters = /[A-Z]/g;
+
+// Begin Username Requirements
+
+    
+
+    userInput.onfocus = function() {
+      document.getElementById("userMessage").style.display = "block";
+    }
+    userInput.onblur = function() {
+      document.getElementById("userMessage").style.display = "none";
+    }
+
+  // -------------------------------------------------  
+    userInput.onkeyup = function() {
+
+      if(userInput.value.match(upperCaseLetters)){
+        usercapital.classList.remove("invalid");
+        usercapital.classList.add("valid");
+      } else{
+        usercapital.classList.remove("valid");
+        usercapital.classList.add("invalid");
+      }
+
+ // -----------------------------------------------
+     
+     if(userInput.value.match(numbers)){
+      usernumber.classList.remove("invalid");
+      usernumber.classList.add("valid");
+    } else{
+     usernumber.classList.remove("valid");
+     usernumber.classList.add("invalid");
+    }
+  // -----------------------------------------------
+    if(userInput.value.length >= 8){
+      userlength.classList.remove("invalid");
+      userlength.classList.add("valid");
+      } else{
+      userlength.classList.remove("valid");
+      userlength.classList.add("invalid");
+      }
+
+// ------------------------------------------------
+    
+    if(userInput.value.match(specialChars)){
+      userspecialChar.classList.remove("invalid");
+      userspecialChar.classList.add("valid");
+    } else {
+      userspecialChar.classList.remove("valid");
+      userspecialChar.classList.add("invalid");
+    }
+
+  }
+
+
+// Begin Password Requirements
 
     myInput.onfocus = function () {
-      document.getElementById("message").style.display = "block";
+      document.getElementById("passMessage").style.display = "block";
     }
 
     myInput.onblur = function () {
-      document.getElementById("message").style.display = "none";
+      document.getElementById("passMessage").style.display = "none";
     }
 
+
+//------------ Begin Password Checks ------------------
+
+
     myInput.onkeyup = function() {
-      var lowerCaseLetters = /[a-z]/g;
+ 
 
       if(myInput.value.match(lowerCaseLetters)){
         letter.classList.remove("invalid");
@@ -83,8 +169,7 @@
         letter.classList.add("invalid");
       }
 // ---------------------------------------------------
-
-      var upperCaseLetters = /[A-Z]/g;
+      
 
       if(myInput.value.match(upperCaseLetters)){
         capital.classList.remove("invalid");
@@ -95,8 +180,6 @@
       }
 // --------------------------------------------------
 
-      var numbers = /[0-9]/g;
-
       if(myInput.value.match(numbers)){
         number.classList.remove("invalid");
         number.classList.add("valid");
@@ -106,15 +189,24 @@
       }
 
 // -------------------------------------------------
-      if(myInput.value.length >= 8){
+      if(myInput.value.length >= 10){
         length.classList.remove("invalid");
         length.classList.add("valid");
       } else{
         length.classList.remove("valid");
         length.classList.add("invalid");
       }
-    }
 
+// ------------------------------------------------
+
+    if(myInput.value.match(specialChars)){
+      specialChar.classList.remove("invalid");
+      specialChar.classList.add("valid");
+    } else {
+      specialChar.classList.remove("valid");
+      specialChar.classList.add("invalid");
+    }
+  }
 
 // ----------Begin Username/Password Saving Function-------
 
