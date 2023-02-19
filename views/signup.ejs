@@ -32,7 +32,7 @@
         <label> Email: </label>
         <input type="text" placeholder="Enter your email" id="email" name="email" required>
         <br>
-        <label for="psw" placeholder="Create a Password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{10,}" required>Password</label>
+        <label for="password" placeholder="Create a Password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{10,}" required>Password</label>
         <input type="password" id="password" name="password" >
 
         <center>
@@ -121,7 +121,7 @@
       var nameTxt;
       var passTxt;
       nameTxt = document.getElementById("username").value;
-      passTxt = document.getElementById('psw').value;
+      passTxt = document.getElementById('password').value;
       if(nameTxt != "" && passTxt != ""){
       console.log(nameTxt , passTxt);
       }
