@@ -23,15 +23,21 @@
       <!-- Create username and password box -->
 
       <div class="square">
+        <label> First Name: </label>
+        <input type="text" placeholder="Enter your first name" id="firstName" name="firstName" required>
+        <label> Last Name: </label>
+        <input type="text" placeholder="Enter your last name" id="lastName" name="lastName" required>
         <label> Username: </label>
         <input type="text" placeholder="Create a Username" id="username" name="username" required>
+        <label> Email: </label>
+        <input type="text" placeholder="Enter your email" id="email" name="email" required>
         <br>
-        <label for="psw" placeholder="Create a Password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required>Password</label>
-        <input type="password" id="psw" name="psw">
+        <label for="psw" placeholder="Create a Password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{10,}" required>Password</label>
+        <input type="password" id="password" name="password" >
 
         <center>
           <button class ="signupButton" onClick="storeUserPass()" type="button"> Sign Up</button>
-       </center>
+        </center>
       </div>
 
     </form>
@@ -51,7 +57,7 @@
     <!-- End HTML, begin JS -->
 
   <script>
-    var myInput = document.getElementById("psw");
+    var myInput = document.getElementById("password");
     var letter = document.getElementById("letter");
     var capital = document.getElementById("capital");
     var number = document.getElementById("number");

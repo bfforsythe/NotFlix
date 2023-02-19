@@ -13,6 +13,7 @@
         <div class="titleRectangle">
             <h1> NotFlix Login</h1>
         </div>
+        <% if(remainingAttempts > 0){ %>
         <form action="/login" method="post">
             <div class="square">
 
@@ -26,12 +27,21 @@
                     <button onClick="grabCredentialsV3()" type="submit"> Login</button>
                     <input type="checkbox" check="checked"> Remember Me
 
-                    <br><br>
+                    <!--Remove hidden input later-->
+                    <input type="hidden" id="remainingAttempts" name="remainingAttempts" value="<%= remainingAttempts %>">
+                    
+                        <br><br>
                     <!--  div class="subText"> New to Notflix?: <a href="./signup.html"> Sign up</a></div>  -->
                     <nav>
                         <a href="/signup">Sign up</a>
                     </nav>
             </div>
+            <% }else{ %>
+                <div class="square">
+                    <p>Too many failed login attempts.</p>
+                    <p>Try again later</p>
+                </div>
+            <% } %>
         </form>
     </div>
     

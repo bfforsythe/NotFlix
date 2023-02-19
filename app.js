@@ -1,5 +1,7 @@
+const fs = require('fs');
 const express = require('express');
 const app = express();
+
 
 // register view engine
 app.set('view engine', 'ejs');
@@ -16,13 +18,22 @@ app.listen(8080);
 // any code to output something to the screen must start with <%= and end with %>
 // to include another ejs file start with <%- and end with %>
 app.get('/', (req, res) =>{
-    res.render('nfLogin',{title: 'Luigi Time'});
+    res.render('nfLogin',{remainingAttempts: 3});
 });
 
 app.post('/login', (req,res)=>{
     // read file for now and save username and password
-    console.log(req.body.username + " logged in");
-    res.redirect('/');
+    fs.readFile("credentials.json", 'utf8', (err,data)=>{
+        const obj = JSON.parse(data);
+        var remainingAttempts = req.body.remainingAttempts;
+        if(obj[req.body.username] != undefined){
+            console.log("youre in");
+            res.redirect('/');
+        }else{
+            remainingAttempts--;
+            res.render('nfLogin',{remainingAttempts: remainingAttempts});
+        }
+    });
 });
 
 app.get('/signup', (req, res) =>{
