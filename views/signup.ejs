@@ -18,7 +18,7 @@
     <%- include('./partials/nav.ejs') %>
 
   <div class="wrapper"> <!-- Set Wrapper Class for centering-->
-    <form action="/createUser">
+    <form action="/createUser" method="post">
 
       <!-- Create username and password box -->
 
@@ -28,15 +28,15 @@
         <label> Last Name: </label>
         <input type="text" placeholder="Enter your last name" id="lastName" name="lastName" required>
         <label> Username: </label>
-        <input type="text" placeholder="Create a Username" id="username" name="username" required>
+        <input type="text" placeholder="Create a Username" id="username" name="username" pattern="(?=.*\d)(?=.*[a-z])(?=.*[@$!%*?&])(?=.*[A-Z]).{8,}" required>
         <label> Email: </label>
         <input type="text" placeholder="Enter your email" id="email" name="email" required>
         <br>
-        <label for="password" placeholder="Create a Password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{10,}" required>Password</label>
-        <input type="password" id="password" name="password" >
+        <label for="password" placeholder="Create a Password">Password</label>
+        <input type="password" id="password" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[@$!%*?&])(?=.*[A-Z]).{10,}" required>
 
         <center>
-          <button class ="signupButton" onClick="storeUserPass()" type="button"> Sign Up</button>
+          <button class ="signupButton" onClick="storeUserPass()" type="submit"> Sign Up</button>
         </center>
       </div>
 

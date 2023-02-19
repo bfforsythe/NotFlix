@@ -42,8 +42,17 @@ app.get('/signup', (req, res) =>{
 
 app.post('/createUser', (req,res)=>{
     // write to saved file a new user
-    console.log(req.body.username + " signed up");
-    res.redirect('/');
+    console.log("signupTime");
+    fs.readFile("credentials.json", 'utf8', (err,data)=>{
+        const obj = JSON.parse(data);
+        if(obj[req.body.username] != undefined){
+            console.log("username taken");
+            res.render('signup',{response: "Username Taken"});
+        }else{
+            console.log("Account Created");
+            res.render('signup',{response: "Account Created"});
+        }
+    });
 });
 
 app.get('/sign-up',(req,res) =>{
