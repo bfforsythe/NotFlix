@@ -22,6 +22,7 @@
                     <br>
                     <label>Password: </label>
                     <input type="password" placeholder="Enter Password" id="password" name="password" required>
+                    <input type="checkbox" class="showPassButton" onclick="showPassword()">
 
                     <br>
                     <button onClick="grabCredentialsV3()" type="submit"> Login</button>
@@ -49,8 +50,16 @@
 </body>
 
 <script>
-    import credJson from "./credentials.json" assert {type: 'JSON'}
-    console.log(credJson)
+
+    function showPassword(){
+      var pwd = document.getElementById("password");
+      if (pwd.type == "password") {
+        pwd.type = "text";
+      }
+      else {
+        pwd.type = "password";
+      }
+    }
 
   /*  function grabCredentials() {
         var nameTxt = document.getElementById("username");
