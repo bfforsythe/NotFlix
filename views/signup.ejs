@@ -11,6 +11,13 @@
   padding: 10px 24px;
   margin-top: 15px;
 }
+input.showPassButton{
+  position:absolute;
+  font-size:smaller;
+  margin-top:0px;
+  width: 20px;
+  height: 20px;
+}
 
 </style>
 
@@ -34,6 +41,9 @@
         <input type="text" placeholder="Enter your email" id="email" name="email" required>
         <label>Password:</label>
         <input type="password" placeholder="Create a Password" id="password" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[@$!%*?&])(?=.*[A-Z]).{10,}" required>
+
+        <input type="checkbox" class="showPassButton" onclick="showPassword()">
+
 
         <center>
           <button class ="signupButton" onClick="storeUserPass()" type="submit"> Sign Up</button>
@@ -72,6 +82,21 @@
     <!-- End HTML, begin JS -->
 
   <script>
+
+    // Show Password
+
+    function showPassword(){
+      var pwd = document.getElementById("password");
+      if (pwd.type == "password") {
+        pwd.type = "text";
+      }
+      else {
+        pwd.type = "password";
+      }
+    }
+
+
+    // Requirement Handling
 
     var myInput = document.getElementById("password");
     var letter = document.getElementById("letter");
