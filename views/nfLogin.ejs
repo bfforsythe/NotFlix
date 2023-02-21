@@ -1,5 +1,14 @@
 <html>
 
+<style>
+   .hcSquare{
+    height: 180px;
+    width: 200px;
+    background-color: white;
+   }
+
+
+</style>
 
 <head>
     <title>NotFlix Login</title>
@@ -15,7 +24,7 @@
         </div>
         <% if(remainingAttempts > 0){ %>
         <form action="/login" method="post">
-            <div class="square">
+            <div class="hcSquare">
 
                     <label> Username: </label>
                     <input type="text" placeholder="Enter Username" id="username" name="username" required>
@@ -38,7 +47,7 @@
                     </nav>
             </div>
             <% }else{ %>
-                <div class="square">
+                <div class="hcSquare">
                     <p>Too many failed login attempts.</p>
                     <p>Try again later</p>
                 </div>
