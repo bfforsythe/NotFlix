@@ -67,7 +67,7 @@ app.post('/createUser', (req,res)=>{
             email: req.body.email
         };
         json.push(obj);
-        const newObj = JSON.stringify(json);
+        const newObj = JSON.stringify(json,null,"\t");
         fs.writeFileSync("credentials.json",newObj,"utf-8");
         console.log("Account Created");
         res.render('signup',{response: "Account Created"});
