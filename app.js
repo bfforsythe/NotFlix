@@ -32,12 +32,16 @@ app.post('/login', (req,res)=>{
     
     if(currUser){
         console.log("Logged in");
-        res.redirect('/');
+        res.redirect('/loginSuccess');
     }else{
         remainingAttempts--;
         console.log("Username or password incorrect\n " + remainingAttempts + " attempts remaining");
         res.render('nfLogin',{remainingAttempts: remainingAttempts});
     }
+});
+
+app.get('/loginSuccess',(req,res) =>{
+    res.render('loginSuccess');
 });
 
 app.get('/signup', (req, res) =>{
