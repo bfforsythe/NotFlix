@@ -7,7 +7,7 @@ const app = express();
 app.set('view engine', 'ejs');
 
 // middleware and static files (look at this tutorial https://www.youtube.com/watch?v=_GJKAs7A0_4&list=PL4cUxeGkcC9jsz4LDYc6kv3ymONOKxwBU&index=8)
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname,'public')));
 app.use(express.urlencoded({extended: true}));
 //app.use(morgan('dev'));
 
