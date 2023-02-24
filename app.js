@@ -22,6 +22,16 @@ app.get('/', (req, res) =>{
     res.render('nfLogin',{remainingAttempts: 3});
 });
 
+process.stdin.on('data', function(){
+    console.log("You did a thing");
+    console.log(Date.now());
+    process.exit();
+});
+
+app.post('/goHome', (req,res)=>{
+    res.redirect('/');
+});
+
 app.post('/login', (req,res)=>{
     // read file for now and save username and password
     const data = fs.readFileSync("credentials.json");
@@ -64,13 +74,17 @@ app.post('/createUser', (req,res)=>{
         var obj = {
             username: req.body.username,
             password: req.body.password,
-            email: req.body.email
+            email: req.body.email,
+            security: {
+                "Mothers maiden name": req.body.question1,
+                "City you were born in": req.body.question2
+            }
         };
         json.push(obj);
         const newObj = JSON.stringify(json,null,"\t");
         fs.writeFileSync("credentials.json",newObj,"utf-8");
         console.log("Account Created");
-        res.render('signup',{response: "Account Created"});
+        res.render('nfLogin',{remainingAttempts: 3});
     }
 });
 

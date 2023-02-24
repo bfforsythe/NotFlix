@@ -1,7 +1,36 @@
+<head>
+
+</head>
+
+<body>
 <p2>WOO! :)</p2>
 
+<form id="redirectMe" action="/goHome" method="post" type="hidden"></form>
 <center>
 
     <img src="/images/login.gif">
 
 </center>
+
+
+
+</body>
+
+<script>
+    var lastInteration = Date.now();
+    document.addEventListener("click",resetTimer);
+    document.addEventListener("keydown",resetTimer);
+
+    function resetTimer(){
+        lastInteration = Date.now();
+    }
+
+    function checkActivity(){
+        if(Date.now() - lastInteration > 10000){
+            document.getElementById("redirectMe").submit();
+        }
+    }
+
+    setInterval(checkActivity,1000);
+</script>
+
