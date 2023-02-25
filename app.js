@@ -66,10 +66,10 @@ app.post('/createUser', (req,res)=>{
 
     if(currUser){
         console.log("username taken");
-        res.render('signup',{response: "Username Taken"});
+        res.render('signup',{response: "usernameTaken"});
     }else if(req.body.password.includes(req.body.username)){
         console.log("Password cannot contain username");
-        res.render('signup',{response: "Username Taken"});
+        res.render('signup',{response: "passwordUsername"});
     }else{
         var obj = {
             username: req.body.username,
@@ -78,7 +78,8 @@ app.post('/createUser', (req,res)=>{
             security: {
                 "Mothers maiden name": req.body.question1,
                 "City of birth": req.body.question2
-            }
+            },
+            accountType: "user"
         };
         json.push(obj);
         const newObj = JSON.stringify(json,null,"\t");
