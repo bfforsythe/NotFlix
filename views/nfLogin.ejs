@@ -18,6 +18,17 @@
 <body>
     <%- include('./partials/nav.ejs') %>
 
+    <% if(response == "createdAccount") {%>
+        <script>
+            alert("Account successfully created");
+        </script>
+    <% } %>
+    <% if(response == "loginFail"){%>
+        <script>
+            alert("Username or password is incorrect.");
+        </script>
+    <% } %>
+
     <div class="wrapper">
         <div class="titleRectangle">
             <h1> NotFlix Login</h1>

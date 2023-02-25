@@ -19,7 +19,7 @@ app.listen(8080);
 // any code to output something to the screen must start with <%= and end with %>
 // to include another ejs file start with <%- and end with %>
 app.get('/', (req, res) =>{
-    res.render('nfLogin',{remainingAttempts: 3});
+    res.render('nfLogin',{remainingAttempts: 3,response: "start"});
 });
 
 process.stdin.on('data', function(){
@@ -46,7 +46,7 @@ app.post('/login', (req,res)=>{
     }else{
         remainingAttempts--;
         console.log("Username or password incorrect\n " + remainingAttempts + " attempts remaining");
-        res.render('nfLogin',{remainingAttempts: remainingAttempts});
+        res.render('nfLogin',{remainingAttempts: remainingAttempts, response: "loginFail"});
     }
 });
 
@@ -77,14 +77,14 @@ app.post('/createUser', (req,res)=>{
             email: req.body.email,
             security: {
                 "Mothers maiden name": req.body.question1,
-                "City you were born in": req.body.question2
+                "City of birth": req.body.question2
             }
         };
         json.push(obj);
         const newObj = JSON.stringify(json,null,"\t");
         fs.writeFileSync("credentials.json",newObj,"utf-8");
         console.log("Account Created");
-        res.render('nfLogin',{remainingAttempts: 3});
+        res.render("nfLogin",{remainingAttempts:3, response:"createdAccount"});
     }
 });
 
