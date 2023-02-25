@@ -19,8 +19,9 @@ input.showPassButton{
   height: 20px;
 }
 .hcSquare{
-  height: 280px;
-  width: 200px;
+  padding: 10%;
+  height: flex;
+  width: flex;
   background-color: white;
 
 }
@@ -38,23 +39,35 @@ input.showPassButton{
 
 
       <div class="hcSquare">
-        <label> First Name: </label>
-        <input type="text" placeholder="Enter your first name" id="firstName" name="firstName" required>
-        <label> Last Name: </label>
-        <input type="text" placeholder="Enter your last name" id="lastName" name="lastName" required>
-        <label> Username: </label>
-        <input type="text" placeholder="Create a Username" id="username" name="username" pattern="(?=.*\d)(?=.*[a-z])(?=.*[@$!%*?&])(?=.*[A-Z]).{8,}" required>
-        <label> Email: </label>
-        <input type="text" placeholder="Enter your email" id="email" name="email" required>
-        <label>Password:</label>
-        <input type="password" placeholder="Create a Password" id="password" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[@$!%*?&])(?=.*[A-Z]).{10,}" required>
-        <input type="checkbox" class="showPassButton" onclick="showPassword()">
-
-        <label>Mothers maiden name:</label>
-        <input type="text" placeholder="Enter Answer" id="question1" name="question1" required>
-        <label>City of birth:</label>
-        <input type="text" placeholder="Enter Answer" id="question2" name="question2" required>
-
+        <div>
+          <label> First Name: </label>
+          <input type="text" placeholder="Enter your first name" id="firstName" name="firstName" required>
+        </div>
+        <div>
+          <label> Last Name: </label>
+          <input type="text" placeholder="Enter your last name" id="lastName" name="lastName" required>
+        </div>
+        <div>
+          <label> Username: </label>
+          <input type="text" placeholder="Create a Username" id="username" name="username" pattern="(?=.*\d)(?=.*[@$!%*?&])(?=.*[A-Z]).{8,}" required>
+        </div>
+        <div>
+          <label> Email: </label>
+          <input type="text" placeholder="Enter your email" id="email" name="email" required>
+        </div>
+        <div>
+          <label>Password:</label>
+          <input type="password" placeholder="Create a Password" id="password" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[@$!%*?&])(?=.*[A-Z]).{10,}" required>
+          <input type="checkbox" class="showPassButton" onclick="showPassword()">
+        </div>
+        <div>
+          <label>Mothers maiden name:</label>
+          <input type="text" placeholder="Enter Answer" id="question1" name="question1" required>
+        </div>
+        <div>
+          <label>City of birth:</label>
+          <input type="text" placeholder="Enter Answer" id="question2" name="question2" required>
+        </div>
 
 
         <center>
