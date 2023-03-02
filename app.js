@@ -2,6 +2,7 @@ const fs = require('fs');
 const express = require('express');
 const path = require('path');
 const app = express();
+const { MongoClient } = require("mongodb");
 
 
 // register view engine
@@ -11,6 +12,10 @@ app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname,'public')));
 app.use(express.urlencoded({extended: true}));
 //app.use(morgan('dev'));
+
+// setup MongoDb
+const uri = "mongodb://127.0.0.1:27017";
+//const client = new MongoClient(uri);
 
 app.listen(8080);
 
@@ -22,11 +27,11 @@ app.get('/', (req, res) =>{
     res.render('nfLogin',{remainingAttempts: 3,response: "start"});
 });
 
-process.stdin.on('data', function(){
-    console.log("You did a thing");
-    console.log(Date.now());
-    process.exit();
-});
+//process.stdin.on('data', function(){
+//    console.log("You did a thing");
+//    console.log(Date.now());
+//    process.exit();
+//});
 
 app.post('/goHome', (req,res)=>{
     res.redirect('/');
@@ -81,9 +86,10 @@ app.post('/createUser', (req,res)=>{
             },
             accountType: "user"
         };
-        json.push(obj);
-        const newObj = JSON.stringify(json,null,"\t");
-        fs.writeFileSync("credentials.json",newObj,"utf-8");
+        addUser(obj).catch(console.dir);
+        //json.push(obj);
+        //const newObj = JSON.stringify(json,null,"\t");
+        //fs.writeFileSync("credentials.json",newObj,"utf-8");
         console.log("Account Created");
         res.render("nfLogin",{remainingAttempts:3, response:"createdAccount"});
     }
@@ -96,3 +102,30 @@ app.get('/sign-up',(req,res) =>{
 app.use((req,res) =>{
     res.status(404).render('404');
 });
+
+
+// MongoDb related functions
+
+async function addUser(obj){
+    const client = new MongoClient(uri);
+    try{
+        const database = client.db("notFlix");
+        const collection = database.collection("users");
+
+        const result = await collection.insertOne(obj);
+    } finally {
+        await client.close();
+    }
+}
+
+async function addMovie(obj){
+    const client = new MongoClient(uri);
+    try{
+        const database = client.db("notFlix");
+        const collection = database.collection("movies");
+
+        const result = await collection.insertOne(obj);
+    } finally {
+        await client.close();
+    }
+}
