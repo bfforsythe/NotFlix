@@ -17,7 +17,7 @@ app.use(express.urlencoded({extended: true}));
 const uri = "mongodb://127.0.0.1:27017";
 //const client = new MongoClient(uri);
 
-app.listen(8080);
+app.listen(8888);
 
 // ejs allows javascript code inside html
 // all internal code lines must start with <% and end with %>
@@ -37,23 +37,25 @@ app.post('/goHome', (req,res)=>{
     res.redirect('/');
 });
 
-app.post('/login', (req,res)=>{
-    // read file for now and save username and password
-    const data = fs.readFileSync("credentials.json");
-    const json = JSON.parse(data);
-    const currUser = json.find(obj => obj['username'] === req.body.username);
 
+app.post('/login', async (req, res) => {
+    const username = req.body.username;
+    const password = req.body.password;
+    const result = await findUser(username, password);
     var remainingAttempts = req.body.remainingAttempts;
+
+    console.log("Username and password: " ,username, " ", password);
     
-    if(currUser){
-        console.log("Logged in");
-        res.redirect('/loginSuccess');
-    }else{
+    if (result) {
+        console.log("Login Successful");
+      res.redirect('/loginSuccess');
+    } else {
+        console.log("Login Failed");
         remainingAttempts--;
         console.log("Username or password incorrect\n " + remainingAttempts + " attempts remaining");
         res.render('nfLogin',{remainingAttempts: remainingAttempts, response: "loginFail"});
     }
-});
+  });
 
 app.get('/loginSuccess',(req,res) =>{
     res.render('loginSuccess');
@@ -109,8 +111,8 @@ app.use((req,res) =>{
 async function addUser(obj){
     const client = new MongoClient(uri);
     try{
-        const database = client.db("notFlix");
-        const collection = database.collection("users");
+        const database = client.db("Notflix");
+        const collection = database.collection("fortnite");
 
         const result = await collection.insertOne(obj);
     } finally {
@@ -129,3 +131,30 @@ async function addMovie(obj){
         await client.close();
     }
 }
+
+async function findUser(username, password) {
+    const client = new MongoClient(uri);
+    const projection = {_id: 0, email: 0, security: 0, accountType: 0};
+    try {
+        await client.connect();
+        console.log("Connected to the database");
+
+        const db = client.db("Notflix");
+        const coll = db.collection("fortnite");
+  
+        const result = await coll.findOne({username:username, password:password}, projection);
+        console.log("Query result: ", result);
+        return result;
+    } catch (error) {
+        console.error("Database error: ", error);
+    } finally {
+        await client.close();
+        console.log("Database connection closed");
+    }
+}
+  
+  
+  
+  
+  
+  
