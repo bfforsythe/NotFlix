@@ -8,7 +8,7 @@
 
 <center>
     <a referrerpolicy="origin-when-cross-origin">
-    <iframe width="560" height="315" src="https://www.youtube.com/embed/videoseries?list=PLsyvDWwjkTqtOmqAiTzzfHspTAztB-udL" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe></center>
+    <iframe id="player" width="560" height="315" src="https://www.youtube.com/embed/videoseries?list=PLsyvDWwjkTqtOmqAiTzzfHspTAztB-udL" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe></center>
     </a>
 </body>
 
@@ -16,15 +16,30 @@
     var lastInteration = Date.now();
     document.addEventListener("click",resetTimer);
     document.addEventListener("keydown",resetTimer);
+    var videoPlayer;
 
     function resetTimer(){
         lastInteration = Date.now();
     }
 
     function checkActivity(){
-        if(Date.now() - lastInteration > 10000){
+        var playerStatus = videoPlayer.getPlayerState()
+        console.log(playerStatus)
+        if(Date.now() - lastInteration > 10000 && playerStatus != 1 && playerStatus != 3){
             document.getElementById("redirectMe").submit();
         }
+    }
+
+    function onYouTubePlayerAPIReady() {
+        videoPlayer = new YT.Player('ytplayer', {
+        events: {
+            'onStateChange': getStatus
+        }
+        });
+    }
+
+    function getStatus(){
+
     }
 
     setInterval(checkActivity,1000);
