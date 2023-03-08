@@ -1,0 +1,40 @@
+<head>
+    <title>Upload Movie</title>
+</head>
+
+<%- include('./partials/head.ejs') %>
+<%- include('./partials/nav.ejs') %>
+
+<body>
+    <div class="wrapper">
+    <form action="/uploadMovie" method="post" id="movieForm">
+        <div class="hcSquare">
+            <label> Title: </label>
+                <input type="text" placeholder="Enter Title" id="title" name="title" required>
+                <br>
+            <label> URL: </label>
+                <input type="text" placeholder="Enter URL" id="url" name="url" required>
+                <br>
+            <label> Genre:</label>
+                <select id="genre" name="genre" required>
+                    <% for(var i = 0; i < genres.length;i++){ %>
+                        <option value=<%=genres[i]%>> <%= genres[i] %> </option>
+                    <% } %>
+                </select>
+                <br>
+            <label> Description: </label>
+                <input type="text" placeholder="Enter Description" id="description" name="description" required>
+                <br>
+            <button type="button" onclick="submitForm()"> Upload</button>
+        </div>
+    </form>
+    </div>
+
+</body>
+
+<script>
+    function submitForm(){
+        alert("Movie successfully submitted.");
+        document.getElementById("movieForm").submit();
+    }
+</script>
