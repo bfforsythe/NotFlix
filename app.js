@@ -160,7 +160,8 @@ async function findUser(username, password) {
 
         const db = client.db("Notflix");
         const coll = db.collection("users");
-  
+        
+        console.log("creddddddddds",username, password);
         const result = await coll.findOne({username:username, password:password}, projection);
         console.log("Query result: ", result);
         return result;
