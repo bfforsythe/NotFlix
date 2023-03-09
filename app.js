@@ -174,9 +174,9 @@ async function findUser(username, password) {
 }
   
 
-async function findMovie(username, password) {
+async function findMovie(title) {
     const client = new MongoClient(uri);
-    const projection = {_id: 0, email: 0, security: 0, accountType: 0};
+    const projection = {_id: 0, url: 0, genre: 0, description: 0, views:0};
     try {
         await client.connect();
         console.log("Connected to the database");
