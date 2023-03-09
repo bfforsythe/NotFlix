@@ -48,7 +48,7 @@ app.post('/login', async (req, res) => {
     
     if (result) {
         console.log("Login Successful");
-      res.redirect('/loginSuccess');
+      res.redirect('/watchPage');
     } else {
         console.log("Login Failed");
         remainingAttempts--;
@@ -57,8 +57,8 @@ app.post('/login', async (req, res) => {
     }
   });
 
-app.get('/loginSuccess',(req,res) =>{
-    res.render('loginSuccess');
+app.get('/watchPage',(req,res) =>{
+    res.render('watchPage',{vidID:'g-NewxZzULI'});
 });
 
 app.get('/signup', (req, res) =>{

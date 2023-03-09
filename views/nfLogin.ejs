@@ -52,11 +52,11 @@
                     <br>
                     <label>Password: </label>
                     <input type="password" placeholder="Enter Password" id="password" name="password" required>
-                    <input type="checkbox" class="showPassButton" onclick="showPassword()">
+                    <input type="checkbox" id="show" name="show" class="showPassButton" onclick="showPassword()">👁
 
                     <br>
                     <button type="submit" onclick="findLoginMDB()"> Login</button>
-                    <input type="checkbox" check="checked"> Remember Me
+                    <!--<input type="checkbox" check="checked"> Remember Me-->
 
                     <!--Remove hidden input later-->
                     <input type="hidden" id="remainingAttempts" name="remainingAttempts" value="<%= remainingAttempts %>">
