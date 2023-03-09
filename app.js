@@ -113,7 +113,8 @@ app.post('/uploadMovie',(req,res)=>{
         title:req.body.title,
         url:req.body.url,
         genre:req.body.genre,
-        description:req.body.description
+        description:req.body.description,
+        views:0
     }
     addMovie(obj).catch(console.dir);
     res.redirect("/");
@@ -182,7 +183,7 @@ async function findMovie(username, password) {
         const db = client.db("Notflix");
         const coll = db.collection("movies");
   
-        const result = await coll.findOne({title:title, password:password}, projection);
+        const result = await coll.findOne({title:title}, projection);
         console.log("Query result: ", result);
         return result;
     } catch (error) {
