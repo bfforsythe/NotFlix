@@ -52,7 +52,7 @@ app.post('/login', async (req, res) => {
     }
     else if (result) {
         console.log("Login Successful");
-      res.redirect('/loginSuccess');
+      res.redirect('/watchPage');
     } else {
         console.log("Login Failed");
         remainingAttempts--;
@@ -61,6 +61,7 @@ app.post('/login', async (req, res) => {
     }
   });
 
+<<<<<<< HEAD
   app.get('/upload', (req,res)=>{
     const genres = [];
     genres.push("Select","Action","Horror","Romance");
@@ -80,6 +81,10 @@ app.post('/uploadMovie',(req,res)=>{
 
 app.get('/loginSuccess',(req,res) =>{
     res.render('loginSuccess');
+=======
+app.get('/watchPage',(req,res) =>{
+    res.render('watchPage',{vidID:'g-NewxZzULI'});
+>>>>>>> 511a4b4b6c1075a2536bddf00cd99d43a69d7c2f
 });
 
 app.get('/signup', (req, res) =>{
@@ -122,6 +127,28 @@ app.get('/sign-up',(req,res) =>{
     res.redirect('signup');
 });
 
+<<<<<<< HEAD
+=======
+
+app.get('/upload', (req,res)=>{
+    const genres = [];
+    genres.push("Select","Action","Horror","Romance");
+    res.render("upload",{genres:genres})
+});    
+
+app.post('/uploadMovie',(req,res)=>{
+    var obj = {
+        title:req.body.title,
+        url:req.body.url,
+        genre:req.body.genre,
+        description:req.body.description,
+        views:0
+    }
+    addMovie(obj).catch(console.dir);
+    res.redirect("/");
+});
+
+>>>>>>> 511a4b4b6c1075a2536bddf00cd99d43a69d7c2f
 app.use((req,res) =>{
     res.status(404).render('404');
 });
@@ -161,8 +188,14 @@ async function findUser(username, password) {
         console.log("Connected to the database");
 
         const db = client.db("Notflix");
+<<<<<<< HEAD
         const coll = db.collection("fortnite");
   
+=======
+        const coll = db.collection("users");
+        
+        console.log("creddddddddds",username, password);
+>>>>>>> 511a4b4b6c1075a2536bddf00cd99d43a69d7c2f
         const result = await coll.findOne({username:username, password:password}, projection);
         console.log("Query result: ", result);
         return result;
@@ -174,6 +207,33 @@ async function findUser(username, password) {
     }
 }
   
+<<<<<<< HEAD
+=======
+
+async function findMovie(title) {
+    const client = new MongoClient(uri);
+    const projection = {_id: 0, url: 0, genre: 0, description: 0, views:0};
+    try {
+        await client.connect();
+        console.log("Connected to the database");
+
+        const db = client.db("Notflix");
+        const coll = db.collection("movies");
+  
+        const result = await coll.findOne({title:title}, projection);
+        console.log("Query result: ", result);
+        return result;
+    } catch (error) {
+        console.error("Database error: ", error);
+    } finally {
+        await client.close();
+        console.log("Database connection closed");
+    }
+}
+  
+  
+  
+>>>>>>> 511a4b4b6c1075a2536bddf00cd99d43a69d7c2f
   
   
   

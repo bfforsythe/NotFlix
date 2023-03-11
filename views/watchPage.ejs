@@ -1,0 +1,65 @@
+<head>
+
+</head>
+
+<body>
+
+<form id="redirectMe" action="/goHome" method="post" type="hidden"></form>
+
+<center>
+    <a referrerpolicy="origin-when-cross-origin">
+        <div id="player"></div>
+    </a>
+</body>
+
+<script>
+    var lastInteration = Date.now();
+    document.addEventListener("click",resetTimer);
+    document.addEventListener("keydown",resetTimer);
+    var state;
+
+    function resetTimer(){
+        lastInteration = Date.now();
+    }
+
+    function checkActivity(){
+        var state = player.getPlayerState();
+        if(Date.now() - lastInteration > 10000 && state != 1 && state != 3){
+            document.getElementById("redirectMe").submit();
+        }
+    }
+
+    var tag = document.createElement('script');
+
+      tag.src = "https://www.youtube.com/iframe_api";
+      var firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    var player;
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('player', {
+            height: '390',
+            width: '640',
+            videoId: '<%- vidID %>',
+            playerVars: {
+            'playsinline': 1,
+            'enablejsapi':1
+            },
+            events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
+            }
+        });
+    }
+    function onPlayerReady(event) {
+       // event.target.playVideo();
+    }
+
+
+    function onPlayerStateChange(event) {
+       resetTimer();
+    }
+
+    setInterval(checkActivity,1000);
+</script>
+
