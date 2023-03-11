@@ -44,13 +44,9 @@ app.post('/login', async (req, res) => {
     const result = await findUser(username, password);
     var remainingAttempts = req.body.remainingAttempts;
 
-    console.log("RESULT: ", result);
+    console.log(result);
     
-    if(result.accountType == "Content Manager"){
-        res.redirect('/upload');
-        console.log("Content Manager found");
-    }
-    else if (result) {
+    if (result) {
         console.log("Login Successful");
       res.redirect('/watchPage');
     } else {
@@ -61,30 +57,8 @@ app.post('/login', async (req, res) => {
     }
   });
 
-<<<<<<< HEAD
-  app.get('/upload', (req,res)=>{
-    const genres = [];
-    genres.push("Select","Action","Horror","Romance");
-    res.render("upload",{genres:genres})
-});    
-
-app.post('/uploadMovie',(req,res)=>{
-    var obj = {
-        title:req.body.title,
-        url:req.body.url,
-        genre:req.body.genre,
-        description:req.body.description
-    }
-    addMovie(obj).catch(console.dir);
-    res.redirect("/");
-});
-
-app.get('/loginSuccess',(req,res) =>{
-    res.render('loginSuccess');
-=======
 app.get('/watchPage',(req,res) =>{
     res.render('watchPage',{vidID:'g-NewxZzULI'});
->>>>>>> 511a4b4b6c1075a2536bddf00cd99d43a69d7c2f
 });
 
 app.get('/signup', (req, res) =>{
@@ -127,8 +101,6 @@ app.get('/sign-up',(req,res) =>{
     res.redirect('signup');
 });
 
-<<<<<<< HEAD
-=======
 
 app.get('/upload', (req,res)=>{
     const genres = [];
@@ -139,7 +111,7 @@ app.get('/upload', (req,res)=>{
 app.post('/uploadMovie',(req,res)=>{
     var obj = {
         title:req.body.title,
-        url:req.body.url,
+        url:req.body.ID,
         genre:req.body.genre,
         description:req.body.description,
         views:0
@@ -148,7 +120,6 @@ app.post('/uploadMovie',(req,res)=>{
     res.redirect("/");
 });
 
->>>>>>> 511a4b4b6c1075a2536bddf00cd99d43a69d7c2f
 app.use((req,res) =>{
     res.status(404).render('404');
 });
@@ -160,7 +131,7 @@ async function addUser(obj){
     const client = new MongoClient(uri);
     try{
         const database = client.db("Notflix");
-        const collection = database.collection("fortnite");
+        const collection = database.collection("users");
 
         const result = await collection.insertOne(obj);
     } finally {
@@ -171,7 +142,7 @@ async function addUser(obj){
 async function addMovie(obj){
     const client = new MongoClient(uri);
     try{
-        const database = client.db("notFlix");
+        const database = client.db("Notflix");
         const collection = database.collection("movies");
 
         const result = await collection.insertOne(obj);
@@ -182,20 +153,15 @@ async function addMovie(obj){
 
 async function findUser(username, password) {
     const client = new MongoClient(uri);
-    const projection = {_id: 0, email: 0, security: 0};
+    const projection = {_id: 0, email: 0, security: 0, accountType: 0};
     try {
         await client.connect();
         console.log("Connected to the database");
 
         const db = client.db("Notflix");
-<<<<<<< HEAD
-        const coll = db.collection("fortnite");
-  
-=======
         const coll = db.collection("users");
         
         console.log("creddddddddds",username, password);
->>>>>>> 511a4b4b6c1075a2536bddf00cd99d43a69d7c2f
         const result = await coll.findOne({username:username, password:password}, projection);
         console.log("Query result: ", result);
         return result;
@@ -207,8 +173,6 @@ async function findUser(username, password) {
     }
 }
   
-<<<<<<< HEAD
-=======
 
 async function findMovie(title) {
     const client = new MongoClient(uri);
@@ -233,7 +197,6 @@ async function findMovie(title) {
   
   
   
->>>>>>> 511a4b4b6c1075a2536bddf00cd99d43a69d7c2f
   
   
   
