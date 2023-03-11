@@ -44,13 +44,9 @@ app.post('/login', async (req, res) => {
     const result = await findUser(username, password);
     var remainingAttempts = req.body.remainingAttempts;
 
-    console.log("RESULT: ", result);
+    console.log(result);
     
-    if(result.accountType == "Content Manager"){
-        res.redirect('/upload');
-        console.log("Content Manager found");
-    }
-    else if (result) {
+    if (result) {
         console.log("Login Successful");
       res.redirect('/watchPage');
     } else {
@@ -115,7 +111,7 @@ app.get('/upload', (req,res)=>{
 app.post('/uploadMovie',(req,res)=>{
     var obj = {
         title:req.body.title,
-        url:req.body.url,
+        url:req.body.ID,
         genre:req.body.genre,
         description:req.body.description,
         views:0
@@ -135,7 +131,7 @@ async function addUser(obj){
     const client = new MongoClient(uri);
     try{
         const database = client.db("Notflix");
-        const collection = database.collection("fortnite");
+        const collection = database.collection("users");
 
         const result = await collection.insertOne(obj);
     } finally {
@@ -157,13 +153,13 @@ async function addMovie(obj){
 
 async function findUser(username, password) {
     const client = new MongoClient(uri);
-    const projection = {_id: 0, email: 0, security: 0};
+    const projection = {_id: 0, email: 0, security: 0, accountType: 0};
     try {
         await client.connect();
         console.log("Connected to the database");
 
         const db = client.db("Notflix");
-        const coll = db.collection("fortnite");
+        const coll = db.collection("users");
         
         console.log("creddddddddds",username, password);
         const result = await coll.findOne({username:username, password:password}, projection);
