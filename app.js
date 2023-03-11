@@ -44,9 +44,13 @@ app.post('/login', async (req, res) => {
     const result = await findUser(username, password);
     var remainingAttempts = req.body.remainingAttempts;
 
-    console.log(result);
+    console.log("RESULT: ", result);
     
-    if (result) {
+    if(result.accountType == "Content Manager"){
+        res.redirect('/upload');
+        console.log("Content Manager found");
+    }
+    else if (result) {
         console.log("Login Successful");
       res.redirect('/loginSuccess');
     } else {
@@ -56,6 +60,23 @@ app.post('/login', async (req, res) => {
         res.render('nfLogin',{remainingAttempts: remainingAttempts, response: "loginFail"});
     }
   });
+
+  app.get('/upload', (req,res)=>{
+    const genres = [];
+    genres.push("Select","Action","Horror","Romance");
+    res.render("upload",{genres:genres})
+});    
+
+app.post('/uploadMovie',(req,res)=>{
+    var obj = {
+        title:req.body.title,
+        url:req.body.url,
+        genre:req.body.genre,
+        description:req.body.description
+    }
+    addMovie(obj).catch(console.dir);
+    res.redirect("/");
+});
 
 app.get('/loginSuccess',(req,res) =>{
     res.render('loginSuccess');
@@ -101,24 +122,6 @@ app.get('/sign-up',(req,res) =>{
     res.redirect('signup');
 });
 
-
-app.get('/upload', (req,res)=>{
-    const genres = [];
-    genres.push("Select","Action","Horror","Romance");
-    res.render("upload",{genres:genres})
-});    
-
-app.post('/uploadMovie',(req,res)=>{
-    var obj = {
-        title:req.body.title,
-        url:req.body.url,
-        genre:req.body.genre,
-        description:req.body.description
-    }
-    addMovie(obj).catch(console.dir);
-    res.redirect("/");
-});
-
 app.use((req,res) =>{
     res.status(404).render('404');
 });
@@ -130,7 +133,7 @@ async function addUser(obj){
     const client = new MongoClient(uri);
     try{
         const database = client.db("Notflix");
-        const collection = database.collection("users");
+        const collection = database.collection("fortnite");
 
         const result = await collection.insertOne(obj);
     } finally {
@@ -141,7 +144,7 @@ async function addUser(obj){
 async function addMovie(obj){
     const client = new MongoClient(uri);
     try{
-        const database = client.db("Notflix");
+        const database = client.db("notFlix");
         const collection = database.collection("movies");
 
         const result = await collection.insertOne(obj);
@@ -152,13 +155,13 @@ async function addMovie(obj){
 
 async function findUser(username, password) {
     const client = new MongoClient(uri);
-    const projection = {_id: 0, email: 0, security: 0, accountType: 0};
+    const projection = {_id: 0, email: 0, security: 0};
     try {
         await client.connect();
         console.log("Connected to the database");
 
         const db = client.db("Notflix");
-        const coll = db.collection("users");
+        const coll = db.collection("fortnite");
   
         const result = await coll.findOne({username:username, password:password}, projection);
         console.log("Query result: ", result);
@@ -170,30 +173,6 @@ async function findUser(username, password) {
         console.log("Database connection closed");
     }
 }
-  
-
-async function findMovie(username, password) {
-    const client = new MongoClient(uri);
-    const projection = {_id: 0, email: 0, security: 0, accountType: 0};
-    try {
-        await client.connect();
-        console.log("Connected to the database");
-
-        const db = client.db("Notflix");
-        const coll = db.collection("movies");
-  
-        const result = await coll.findOne({title:title, password:password}, projection);
-        console.log("Query result: ", result);
-        return result;
-    } catch (error) {
-        console.error("Database error: ", error);
-    } finally {
-        await client.close();
-        console.log("Database connection closed");
-    }
-}
-  
-  
   
   
   
