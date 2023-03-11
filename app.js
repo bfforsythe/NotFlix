@@ -15,7 +15,6 @@ app.use(express.urlencoded({extended: true}));
 
 // setup MongoDb
 const uri = "mongodb://127.0.0.1:27017";
-//const client = new MongoClient(uri);
 
 app.listen(8888);
 
@@ -89,9 +88,7 @@ app.post('/createUser', (req,res)=>{
             accountType: "user"
         };
         addUser(obj).catch(console.dir);
-        //json.push(obj);
-        //const newObj = JSON.stringify(json,null,"\t");
-        //fs.writeFileSync("credentials.json",newObj,"utf-8");
+        
         console.log("Account Created");
         res.render("nfLogin",{remainingAttempts:3, response:"createdAccount"});
     }
@@ -161,7 +158,6 @@ async function findUser(username, password) {
         const db = client.db("Notflix");
         const coll = db.collection("users");
         
-        console.log("creddddddddds",username, password);
         const result = await coll.findOne({username:username, password:password}, projection);
         console.log("Query result: ", result);
         return result;
