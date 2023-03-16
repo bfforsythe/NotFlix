@@ -1,15 +1,39 @@
-<head>
 
+<%- include('./partials/head.ejs') %>
+<head>
+    <style>
+        Body {
+            background-image: none;
+            background-color: aqua;
+        }
+        .desc {
+        width: 100%;
+        height: flex;
+        border-style: solid;
+        border-width: 2px;
+        }
+    </style>
 </head>
 
 <body>
 
 <form id="redirectMe" action="/goHome" method="post" type="hidden"></form>
 
-<center>
-    <a referrerpolicy="origin-when-cross-origin">
-        <div id="player"></div>
-    </a>
+<div class="center">
+    <div style="text-align: center; font-size: 20;" name="title"><%= vidData.title  %></div>
+    <div name="video">
+        <a referrerpolicy="origin-when-cross-origin">
+            <div id="player"></div>
+        </a>
+    </div>
+    <div class="desc">
+        <div>
+            <div style="width: 50%; height: 40px; float: left;" name="genre">Genre: <%= vidData.genre %></div>
+            <div style="margin-left: 50%; height: 40px;" name="views">Views: <%= vidData.views %></div>
+        </div>
+        <div style="width: flex;" name="description">Description: <%= vidData.description %></div>
+    </div>
+</div>
 </body>
 
 <script>
@@ -17,6 +41,7 @@
     document.addEventListener("click",resetTimer);
     document.addEventListener("keydown",resetTimer);
     var state;
+    var logoutTime = 300000;
 
     function resetTimer(){
         lastInteration = Date.now();
@@ -24,7 +49,7 @@
 
     function checkActivity(){
         var state = player.getPlayerState();
-        if(Date.now() - lastInteration > 10000 && state != 1 && state != 3){
+        if(Date.now() - lastInteration > logoutTime && state != 1 && state != 3){
             document.getElementById("redirectMe").submit();
         }
     }
@@ -40,7 +65,7 @@
         player = new YT.Player('player', {
             height: '390',
             width: '640',
-            videoId: '<%- vidID %>',
+            videoId: '<%- vidData.url %>',
             playerVars: {
             'playsinline': 1,
             'enablejsapi':1

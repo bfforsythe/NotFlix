@@ -42,8 +42,6 @@ app.post('/login', async (req, res) => {
     const password = req.body.password;
     const result = await findUser(username, password);
     var remainingAttempts = req.body.remainingAttempts;
-
-    console.log(result);
     
     if (result) {
         console.log("Login Successful");
@@ -56,8 +54,9 @@ app.post('/login', async (req, res) => {
     }
   });
 
-app.get('/watchPage',(req,res) =>{
-    res.render('watchPage',{vidID:'g-NewxZzULI'});
+app.get('/watchPage', async (req,res) =>{
+    const vidData = await findMovie("Joe The Biden");
+    res.render('watchPage', { vidData });
 });
 
 app.get('/signup', (req, res) =>{
@@ -159,7 +158,6 @@ async function findUser(username, password) {
         const coll = db.collection("users");
         
         const result = await coll.findOne({username:username, password:password}, projection);
-        console.log("Query result: ", result);
         return result;
     } catch (error) {
         console.error("Database error: ", error);
@@ -181,7 +179,7 @@ async function findMovie(title) {
         const coll = db.collection("movies");
   
         const result = await coll.findOne({title:title}, projection);
-        console.log("Query result: ", result);
+        //console.log("Query result: ", result);
         return result;
     } catch (error) {
         console.error("Database error: ", error);
