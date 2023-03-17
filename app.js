@@ -3,6 +3,7 @@ const express = require('express');
 const path = require('path');
 const app = express();
 const { MongoClient } = require("mongodb");
+const session = require('express-session');
 
 
 // register view engine
@@ -11,6 +12,11 @@ app.set('view engine', 'ejs');
 // middleware and static files (look at this tutorial https://www.youtube.com/watch?v=_GJKAs7A0_4&list=PL4cUxeGkcC9jsz4LDYc6kv3ymONOKxwBU&index=8)
 app.use(express.static(path.join(__dirname,'public')));
 app.use(express.urlencoded({extended: true}));
+app.use(session({
+    secret:'youtestingthesecretrightnow',
+    resave: false,
+    saveUninitialized: false
+}));
 //app.use(morgan('dev'));
 
 // setup MongoDb
@@ -37,15 +43,16 @@ app.post('/goHome', (req,res)=>{
 });
 
 
-app.post('/login', async (req, res) => {
+app.post('/login', async (req, res, next) => {
     const username = req.body.username;
     const password = req.body.password;
-    const result = await findUser(username, password);
+    const user = await findUser(username, password);
     var remainingAttempts = req.body.remainingAttempts;
     
-    if (result) {
+    if (user) {
         console.log("Login Successful");
-      res.redirect('/watchPage');
+        req.session.user = user;
+        res.redirect('/watchPage');
     } else {
         console.log("Login Failed");
         remainingAttempts--;
@@ -55,8 +62,9 @@ app.post('/login', async (req, res) => {
   });
 
 app.get('/watchPage', async (req,res) =>{
+    const user = req.session.user;
     const vidData = await findMovie("Joe The Biden");
-    res.render('watchPage', { vidData });
+    res.render('watchPage', { user, vidData });
 });
 
 app.get('/signup', (req, res) =>{

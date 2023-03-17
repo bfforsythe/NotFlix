@@ -29,7 +29,11 @@
     <div class="desc">
         <div>
             <div style="width: 50%; height: 40px; float: left;" name="genre">Genre: <%= vidData.genre %></div>
+            <% if(user.accountType == "marketing") {%>
             <div style="margin-left: 50%; height: 40px;" name="views">Views: <%= vidData.views %></div>
+            <% }else{ %>
+            <br><br>
+            <% } %>
         </div>
         <div style="width: flex;" name="description">Description: <%= vidData.description %></div>
     </div>
