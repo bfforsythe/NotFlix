@@ -9,21 +9,37 @@
     <div class="wrapper">
     <form action="/uploadMovie" method="post" id="movieForm">
         <div class="hcSquare">
+            <% if(movie){ %>
+            <% var title = movie.title; %>
+            <% var url = movie.url; %>
+            <% var description = movie.description; %>
+            <% var genre = movie.genre; %>
+            <% }else{ %>
+            <% var title = ""; %>
+            <% var url = ""; %>
+            <% var description = ""; %>
+            <% var genre = ""; %>
+            <% } %>
             <label> Title: </label>
-                <input type="text" placeholder="Enter Title" id="title" name="title" required>
+                <input type="text" placeholder="Enter Title" id="title" name="title" value="<%= title %>" required>
                 <br>
             <label> Video ID: </label>
-                <input type="text" placeholder="Enter ID" id="ID" name="ID" required>
+                <input type="text" placeholder="Enter ID" id="ID" name="ID" value="<%= url %>" required>
                 <br>
             <label> Genre:</label>
-                <select id="genre" name="genre" required>
+                <select id="genre" name="genre" value="<%= genre %>" required>
+                    <option selected disabled hidden>Select</option>
                     <% for(var i = 0; i < genres.length;i++){ %>
-                        <option value=<%=genres[i]%>> <%= genres[i] %> </option>
+                        <% if (genre == genres[i]){ %>
+                            <option selected value=<%=genres[i]%>> <%= genres[i] %> </option>
+                        <% }else{ %>
+                            <option value=<%=genres[i]%>> <%= genres[i] %> </option>
+                        <% } %>
                     <% } %>
                 </select>
                 <br>
             <label> Description: </label>
-                <input type="text" placeholder="Enter Description" id="description" name="description" required>
+                <input type="text" placeholder="Enter Description" id="description" name="description" value="<%= description %>" required>
                 <br>
             <button type="button" onclick="submitForm()"> Upload</button>
         </div>

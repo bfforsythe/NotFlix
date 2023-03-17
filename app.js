@@ -63,7 +63,7 @@ app.post('/login', async (req, res, next) => {
 
 app.get('/watchPage', async (req,res) =>{
     const user = req.session.user;
-    const vidData = await findMovie("Joe The Biden");
+    const vidData = await findMovie("A");
     res.render('watchPage', { user, vidData });
 });
 
@@ -105,14 +105,25 @@ app.get('/sign-up',(req,res) =>{
     res.redirect('signup');
 });
 
+app.post('/edit',(req,res) =>{
+    req.session.movie = {
+        title: req.body.title,
+        url: req.body.url,
+        genre: req.body.genre,
+        description: req.body.description,
+        views: req.body.views
+    };
+    res.redirect('upload');
+});
 
 app.get('/upload', (req,res)=>{
+    movie = req.session.movie
     const genres = [];
-    genres.push("Select","Action","Horror","Romance");
-    res.render("upload",{genres:genres})
+    genres.push("Action","Horror","Romance");
+    res.render("upload",{genres, movie})
 });    
 
-app.post('/uploadMovie',(req,res)=>{
+app.post('/uploadMovie',async (req,res)=>{
     var obj = {
         title:req.body.title,
         url:req.body.ID,
@@ -120,7 +131,13 @@ app.post('/uploadMovie',(req,res)=>{
         description:req.body.description,
         views:0
     }
-    addMovie(obj).catch(console.dir);
+    var previousEntry = findMovie(obj.title)
+    if(!previousEntry){
+        addMovie(obj).catch(console.dir);
+    }else{
+        deleteMovie(await getMovieID(obj.title)).catch(console.dir);
+        addMovie(obj).catch(console.dir);
+    }
     res.redirect("/");
 });
 
@@ -196,8 +213,42 @@ async function findMovie(title) {
         console.log("Database connection closed");
     }
 }
+
+async function getMovieID(title) {
+    const client = new MongoClient(uri);
+    const projection = {_id: 0, url: 0, genre: 0, description: 0, views:0};
+    try {
+        await client.connect();
+
+        const db = client.db("Notflix");
+        const coll = db.collection("movies");
   
+        const result = await coll.findOne({title:title}, projection);
+        return result._id;
+    } catch (error) {
+        console.error("Database error: ", error);
+    } finally {
+        await client.close();
+    }
+}
   
+async function deleteMovie(id) {
+    const client = new MongoClient(uri);
+    const projection = {title: 0, url: 0, genre: 0, description: 0, views:0};
+    try {
+        await client.connect();
+
+        const db = client.db("Notflix");
+        const coll = db.collection("movies");
+  
+        await coll.deleteOne({_id:id}, projection);
+        return;
+    } catch (error) {
+        console.error("Database error: ", error);
+    } finally {
+        await client.close();
+    }
+}
   
   
   
