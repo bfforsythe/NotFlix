@@ -9,41 +9,29 @@ const session = require('express-session');
 // register view engine
 app.set('view engine', 'ejs');
 
-// middleware and static files (look at this tutorial https://www.youtube.com/watch?v=_GJKAs7A0_4&list=PL4cUxeGkcC9jsz4LDYc6kv3ymONOKxwBU&index=8)
 app.use(express.static(path.join(__dirname,'public')));
 app.use(express.urlencoded({extended: true}));
+
+// set up session
+// should change secret periodically
 app.use(session({
     secret:'youtestingthesecretrightnow',
     resave: false,
     saveUninitialized: false
 }));
-//app.use(morgan('dev'));
 
 // setup MongoDb
 const uri = "mongodb://127.0.0.1:27017";
 
+// set website port
 app.listen(8888);
 
-// ejs allows javascript code inside html
-// all internal code lines must start with <% and end with %>
-// any code to output something to the screen must start with <%= and end with %>
-// to include another ejs file start with <%- and end with %>
-app.get('/', (req, res) =>{
-    res.render('nfLogin',{remainingAttempts: 3,response: "start"});
-});
-
-//process.stdin.on('data', function(){
-//    console.log("You did a thing");
-//    console.log(Date.now());
-//    process.exit();
-//});
-
+/////// post requests ///////
 app.post('/goHome', (req,res)=>{
     res.redirect('/');
 });
 
-
-app.post('/login', async (req, res, next) => {
+app.post('/login', async (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
     const user = await findUser(username, password);
@@ -59,16 +47,6 @@ app.post('/login', async (req, res, next) => {
         console.log("Username or password incorrect\n " + remainingAttempts + " attempts remaining");
         res.render('nfLogin',{remainingAttempts: remainingAttempts, response: "loginFail"});
     }
-  });
-
-app.get('/watchPage', async (req,res) =>{
-    const user = req.session.user;
-    const vidData = await findMovie("A");
-    res.render('watchPage', { user, vidData });
-});
-
-app.get('/signup', (req, res) =>{
-    res.render('signup');
 });
 
 app.post('/createUser', (req,res)=>{
@@ -101,10 +79,6 @@ app.post('/createUser', (req,res)=>{
     }
 });
 
-app.get('/sign-up',(req,res) =>{
-    res.redirect('signup');
-});
-
 app.post('/edit',(req,res) =>{
     req.session.movie = {
         title: req.body.title,
@@ -115,13 +89,6 @@ app.post('/edit',(req,res) =>{
     };
     res.redirect('upload');
 });
-
-app.get('/upload', (req,res)=>{
-    movie = req.session.movie
-    const genres = [];
-    genres.push("Action","Horror","Romance");
-    res.render("upload",{genres, movie})
-});    
 
 app.post('/uploadMovie',async (req,res)=>{
     var obj = {
@@ -137,17 +104,49 @@ app.post('/uploadMovie',async (req,res)=>{
     }else{
         deleteMovie(await getMovieID(obj.title)).catch(console.dir);
         addMovie(obj).catch(console.dir);
+        req.session.movie = ""
     }
+    console.log("Movie Uploaded")
     res.redirect("/");
 });
 
+/////// website directories ///////
+app.get('/', (req, res) =>{
+    res.render('nfLogin',{remainingAttempts: 3,response: "start"});
+});
+
+app.get('/watchPage', async (req,res) =>{
+    const user = req.session.user;
+    const vidData = await findMovie("A");
+    res.render('watchPage', { user, vidData });
+});
+
+app.get('/signup', (req, res) =>{
+    res.render('signup');
+});
+
+app.get('/sign-up',(req,res) =>{
+    res.redirect('signup');
+});
+
+app.get('/upload', (req,res)=>{
+    movie = req.session.movie
+    const genres = [];
+    genres.push("Action","Horror","Romance");
+    res.render("upload",{genres, movie})
+});    
+
+// 404 page
 app.use((req,res) =>{
     res.status(404).render('404');
 });
 
 
-// MongoDb related functions
+/////// MongoDb related functions ///////
 
+// addUser
+// takes a user object
+// returns nothing
 async function addUser(obj){
     const client = new MongoClient(uri);
     try{
@@ -160,6 +159,9 @@ async function addUser(obj){
     }
 }
 
+// addMovie
+// takes a movie object
+// returns nothing
 async function addMovie(obj){
     const client = new MongoClient(uri);
     try{
@@ -172,12 +174,14 @@ async function addMovie(obj){
     }
 }
 
+// findUser
+// takes a username and password
+// returns a user object
 async function findUser(username, password) {
     const client = new MongoClient(uri);
     const projection = {_id: 0, email: 0, security: 0, accountType: 0};
     try {
         await client.connect();
-        console.log("Connected to the database");
 
         const db = client.db("Notflix");
         const coll = db.collection("users");
@@ -188,17 +192,17 @@ async function findUser(username, password) {
         console.error("Database error: ", error);
     } finally {
         await client.close();
-        console.log("Database connection closed");
     }
 }
   
-
+// findMovie
+// takes a title string
+// returns a movie object
 async function findMovie(title) {
     const client = new MongoClient(uri);
     const projection = {_id: 0, url: 0, genre: 0, description: 0, views:0};
     try {
         await client.connect();
-        console.log("Connected to the database");
 
         const db = client.db("Notflix");
         const coll = db.collection("movies");
@@ -210,10 +214,12 @@ async function findMovie(title) {
         console.error("Database error: ", error);
     } finally {
         await client.close();
-        console.log("Database connection closed");
     }
 }
 
+// getMovieID
+// takes a title string
+// returns _ID from movie object
 async function getMovieID(title) {
     const client = new MongoClient(uri);
     const projection = {_id: 0, url: 0, genre: 0, description: 0, views:0};
@@ -232,6 +238,9 @@ async function getMovieID(title) {
     }
 }
   
+// deleteMovie
+// takes _ID of movie
+// returns nothing
 async function deleteMovie(id) {
     const client = new MongoClient(uri);
     const projection = {title: 0, url: 0, genre: 0, description: 0, views:0};
