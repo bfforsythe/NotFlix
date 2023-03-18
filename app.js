@@ -102,6 +102,8 @@ app.post('/uploadMovie',async (req,res)=>{
     if(!previousEntry){
         addMovie(obj).catch(console.dir);
     }else{
+        // shoulve done something with upsert, but it does work
+        // https://www.mongodb.com/docs/manual/reference/method/db.collection.update/
         deleteMovie(await getMovieID(obj.title)).catch(console.dir);
         addMovie(obj).catch(console.dir);
         req.session.movie = ""
@@ -117,7 +119,8 @@ app.get('/', (req, res) =>{
 
 app.get('/watchPage', async (req,res) =>{
     const user = req.session.user;
-    const vidData = await findMovie("A");
+    const vidData = await findMovie("A");   // to make dynamic, need a way to pass title where "A" is
+    addView(getMovieID(vidData.title));
     res.render('watchPage', { user, vidData });
 });
 
@@ -208,7 +211,6 @@ async function findMovie(title) {
         const coll = db.collection("movies");
   
         const result = await coll.findOne({title:title}, projection);
-        //console.log("Query result: ", result);
         return result;
     } catch (error) {
         console.error("Database error: ", error);
@@ -250,7 +252,7 @@ async function deleteMovie(id) {
         const db = client.db("Notflix");
         const coll = db.collection("movies");
   
-        await coll.deleteOne({_id:id}, projection);
+        await coll.deleteOne({_id:await id}, projection);
         return;
     } catch (error) {
         console.error("Database error: ", error);
@@ -259,6 +261,26 @@ async function deleteMovie(id) {
     }
 }
   
-  
+// addView
+// takes _ID of movie
+// returns nothing
+async function addView(id) {
+    const client = new MongoClient(uri);
+    const projection = {title: 0, url: 0, genre: 0, description: 0, views:0};
+    try {
+        await client.connect();
+
+        const db = client.db("Notflix");
+        const coll = db.collection("movies");
+        
+        const result = await coll.findOne({_id:await id}, projection);
+        await coll.updateOne({ _id:await id },{ $set: { views:result.views+1 } })
+        return;
+    } catch (error) {
+        console.error("Database error: ", error);
+    } finally {
+        await client.close();
+    }
+}
   
   
