@@ -5,6 +5,11 @@ const app = express();
 const { MongoClient } = require("mongodb");
 const session = require('express-session');
 
+// Program constant variables
+const databaseName = "Notflix";
+const userColl = "users";
+const movieColl = "movies";
+
 
 // register view engine
 app.set('view engine', 'ejs');
@@ -153,8 +158,8 @@ app.use((req,res) =>{
 async function addUser(obj){
     const client = new MongoClient(uri);
     try{
-        const database = client.db("Notflix");
-        const collection = database.collection("users");
+        const database = client.db(databaseName);
+        const collection = database.collection(userColl);
 
         const result = await collection.insertOne(obj);
     } finally {
@@ -168,8 +173,8 @@ async function addUser(obj){
 async function addMovie(obj){
     const client = new MongoClient(uri);
     try{
-        const database = client.db("Notflix");
-        const collection = database.collection("movies");
+        const database = client.db(databaseName);
+        const collection = database.collection(movieColl);
 
         const result = await collection.insertOne(obj);
     } finally {
@@ -186,8 +191,8 @@ async function findUser(username, password) {
     try {
         await client.connect();
 
-        const db = client.db("Notflix");
-        const coll = db.collection("users");
+        const db = client.db(databaseName);
+        const coll = db.collection(userColl);
         
         const result = await coll.findOne({username:username, password:password}, projection);
         return result;
@@ -207,8 +212,8 @@ async function findMovie(title) {
     try {
         await client.connect();
 
-        const db = client.db("Notflix");
-        const coll = db.collection("movies");
+        const db = client.db(databaseName);
+        const coll = db.collection(movieColl);
   
         const result = await coll.findOne({title:title}, projection);
         return result;
@@ -228,8 +233,8 @@ async function getMovieID(title) {
     try {
         await client.connect();
 
-        const db = client.db("Notflix");
-        const coll = db.collection("movies");
+        const db = client.db(databaseName);
+        const coll = db.collection(movieColl);
   
         const result = await coll.findOne({title:title}, projection);
         return result._id;
@@ -249,8 +254,8 @@ async function deleteMovie(id) {
     try {
         await client.connect();
 
-        const db = client.db("Notflix");
-        const coll = db.collection("movies");
+        const db = client.db(databaseName);
+        const coll = db.collection(movieColl);
   
         await coll.deleteOne({_id:await id}, projection);
         return;
@@ -270,8 +275,8 @@ async function addView(id) {
     try {
         await client.connect();
 
-        const db = client.db("Notflix");
-        const coll = db.collection("movies");
+        const db = client.db(databaseName);
+        const coll = db.collection(movieColl);
         
         const result = await coll.findOne({_id:await id}, projection);
         await coll.updateOne({ _id:await id },{ $set: { views:result.views+1 } })
