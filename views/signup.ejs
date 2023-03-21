@@ -32,6 +32,18 @@ input.showPassButton{
     <%- include('./partials/head.ejs') %>
     <%- include('./partials/nav.ejs') %>
 
+    
+    <% if(response == "passwordUsername"){%>
+      <script>
+          alert("Password cannot contain username.");
+      </script>
+    <% } %>
+    <% if(response == "usernameTaken"){%>
+      <script>
+          alert("Username is taken.");
+      </script>
+    <% } %>
+
   <div class="wrapper"> <!-- Set Wrapper Class for centering-->
     <form action="/createUser" method="post">
 
