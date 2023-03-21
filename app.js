@@ -9,6 +9,8 @@ const session = require('express-session');
 const databaseName = "Notflix";
 const userColl = "users";
 const movieColl = "movies";
+const loginAttempts = 3;
+const genres = ["Action","Horror","Romance"];
 
 
 // register view engine
@@ -39,7 +41,7 @@ app.post('/goHome', (req,res)=>{
 app.post('/login', async (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
-    const user = await findUser(username, password);
+    const user = await checkCredentials(username, password);
     var remainingAttempts = req.body.remainingAttempts;
     
     if (user) {
@@ -54,11 +56,11 @@ app.post('/login', async (req, res) => {
     }
 });
 
-app.post('/createUser', (req,res)=>{
+app.post('/createUser', async (req,res)=>{
     // write to saved file a new user
-    var data = fs.readFileSync("credentials.json");
-    var json = JSON.parse(data);
-    const currUser = json.find(obj => obj['username'].toUpperCase() === req.body.username.toUpperCase());
+    const currUser = await checkAvailability(req.body.username);
+    console.log(req.username);
+    console.log(currUser);
 
     if(currUser){
         console.log("username taken");
@@ -80,7 +82,7 @@ app.post('/createUser', (req,res)=>{
         addUser(obj).catch(console.dir);
         
         console.log("Account Created");
-        res.render("nfLogin",{remainingAttempts:3, response:"createdAccount"});
+        res.render("nfLogin",{remainingAttempts:loginAttempts, response:"createdAccount"});
     }
 });
 
@@ -119,7 +121,7 @@ app.post('/uploadMovie',async (req,res)=>{
 
 /////// website directories ///////
 app.get('/', (req, res) =>{
-    res.render('nfLogin',{remainingAttempts: 3,response: "start"});
+    res.render('nfLogin',{remainingAttempts: loginAttempts,response: "start"});
 });
 
 app.get('/watchPage', async (req,res) =>{
@@ -130,7 +132,7 @@ app.get('/watchPage', async (req,res) =>{
 });
 
 app.get('/signup', (req, res) =>{
-    res.render('signup');
+    res.render('signup',{response:""});
 });
 
 app.get('/sign-up',(req,res) =>{
@@ -139,8 +141,6 @@ app.get('/sign-up',(req,res) =>{
 
 app.get('/upload', (req,res)=>{
     movie = req.session.movie
-    const genres = [];
-    genres.push("Action","Horror","Romance");
     res.render("upload",{genres, movie})
 });    
 
@@ -182,10 +182,10 @@ async function addMovie(obj){
     }
 }
 
-// findUser
+// checkCredentials
 // takes a username and password
 // returns a user object
-async function findUser(username, password) {
+async function checkCredentials(username, password) {
     const client = new MongoClient(uri);
     const projection = {_id: 0, email: 0, security: 0, accountType: 0};
     try {
@@ -195,6 +195,35 @@ async function findUser(username, password) {
         const coll = db.collection(userColl);
         
         const result = await coll.findOne({username:username, password:password}, projection);
+        return result;
+    } catch (error) {
+        console.error("Database error: ", error);
+    } finally {
+        await client.close();
+    }
+}
+
+// checkAvailability
+// takes a username and password
+// returns a user object
+async function checkAvailability(username) {
+    const client = new MongoClient(uri);
+    const projection = {_id: 0, email: 0, security: 0, accountType: 0, password: 0};
+    try {
+        await client.connect();
+
+        const db = client.db(databaseName);
+        const coll = db.collection(userColl);
+        
+        var regstr = "";
+        for( var i = 0; i < username.length; i++){
+            if (username.charAt(i) == '$'){
+                regstr += "\\$";
+            }else{
+                regstr += username.charAt(i);
+            }
+        }
+        const result = await coll.findOne({username: {$regex: new RegExp('^' + regstr + '$', 'i')}}, projection);
         return result;
     } catch (error) {
         console.error("Database error: ", error);
