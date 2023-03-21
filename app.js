@@ -59,8 +59,6 @@ app.post('/login', async (req, res) => {
 app.post('/createUser', async (req,res)=>{
     // write to saved file a new user
     const currUser = await checkAvailability(req.body.username);
-    console.log(req.username);
-    console.log(currUser);
 
     if(currUser){
         console.log("username taken");
