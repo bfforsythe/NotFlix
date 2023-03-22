@@ -146,12 +146,15 @@ app.get('/upload', (req,res)=>{
 app.get('/browsingPage', async (req,res) =>{
     const user = req.session.user;
     const [urlData] = await Promise.all([storeMovies(), ]);
-    const urls = urlData.map(movie => movie.url);
-    console.log("-----------URLS-------------", urls);
 
+    const newMovieGenres = {
+        Action: urlData.filter(movie => movie.genre === "Action").map(movie => movie.url),
+        Horror: urlData.filter(movie => movie.genre === "Horror").map(movie => movie.url),
+        Romance: urlData.filter(movie => movie.genre === "Romance").map(movie => movie.url)
+      };
 
-    res.render("browsingPage", {user, urls});
-})
+    res.render("browsingPage", { user, newMovieGenres });
+});
 
 // 404 page
 app.use((req,res) =>{
@@ -332,7 +335,7 @@ async function addView(id) {
 // returns array of urls
 async function storeMovies() {
     const client = new MongoClient(uri);
-    const projection = {_id:0, url:1, genre:0, description:0, views:0};
+    const projection = {_id:0, url:1, genre:1, description:0, views:0};
 
     try {
         await client.connect();
