@@ -19,8 +19,6 @@
 
 <form id="redirectMe" action="/goHome" method="post" type="hidden"></form>
 
-<button onclick="retrieveURL()">Click me to make sure something got saved!</button>
-
 <div class="center">
     <div style="text-align: center; font-size: 20;" name="title"><%= vidData.title  %></div>
     <div name="video">
@@ -107,9 +105,9 @@
     setInterval(checkActivity,1000);
 
     function retrieveURL(){
-        var savedURL = localStorage.getItem("retrievedURL");
-        return retrievedURL;
-        console.log("item retrieved!");
-    }
+  var savedURL = localStorage.getItem("retrievedURL");
+  console.log("item retrieved: " + savedURL);
+  return savedURL;
+}
 </script>
 

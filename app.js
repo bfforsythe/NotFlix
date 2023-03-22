@@ -122,10 +122,11 @@ app.get('/', (req, res) =>{
     res.render('nfLogin',{remainingAttempts: loginAttempts,response: "start"});
 });
 
-app.get('/watchPage', async (req,res) =>{
+app.get('/watchPage/:url', async (req, res) => {
     const user = req.session.user;
-    const vidData = await findMovie("A");   // to make dynamic, need a way to pass title where "A" is
-    addView(getMovieID(vidData.title));
+    const url = req.params.url; // change title to url
+    const vidData = await findMovie(url);
+    addView(getMovieID(vidData.url));
     res.render('watchPage', { user, vidData });
 });
 
@@ -243,16 +244,14 @@ async function checkAvailability(username) {
 // findMovie
 // takes a title string
 // returns a movie object
-async function findMovie(title) {
+async function findMovie(url) {
     const client = new MongoClient(uri);
-    const projection = {_id: 0, url: 0, genre: 0, description: 0, views:0};
+    const projection = { _id: 0, url: 1, title: 0, genre: 0, description: 0, views: 0 };
     try {
         await client.connect();
-
         const db = client.db(databaseName);
         const coll = db.collection(movieColl);
-  
-        const result = await coll.findOne({title:title}, projection);
+        const result = await coll.findOne({ url: url }, projection);
         return result;
     } catch (error) {
         console.error("Database error: ", error);
@@ -264,16 +263,16 @@ async function findMovie(title) {
 // getMovieID
 // takes a title string
 // returns _ID from movie object
-async function getMovieID(title) {
+async function getMovieID(url) {
     const client = new MongoClient(uri);
-    const projection = {_id: 0, url: 0, genre: 0, description: 0, views:0};
+    const projection = {_id: 0, url: 1, title:0, genre: 0, description: 0, views:0};
     try {
         await client.connect();
 
         const db = client.db(databaseName);
         const coll = db.collection(movieColl);
   
-        const result = await coll.findOne({title:title}, projection);
+        const result = await coll.findOne({url:url}, projection);
         return result._id;
     } catch (error) {
         console.error("Database error: ", error);

@@ -19,8 +19,8 @@
           <div class="slideshow-group">
             <% for (let j = i; j < i + 4 && j < urls.length; j++) { %>
                 <div class="mySlides fade">
-                    <img height="100px" width="200px" src="https://i.ytimg.com/vi/<%= urls[j] %>/maxresdefault.jpg" onclick="storeURL('<%= urls[j] %>')">
-                </div>    
+                        <img height="100px" width="200px" src="https://i.ytimg.com/vi/<%= urls[j] %>/maxresdefault.jpg" onclick="storeURL('<%= urls[j] %>')">
+                    </div>  
             <% } %>
           
         <% } %>
@@ -35,10 +35,11 @@
 <script>
 
 
-function storeURL(urls, j) {
-    var savedURL = urls[j];
-    localStorage.setItem("retrievedURL", savedURL);
-    console.log("URL STORED!");
+function storeURL(url) {
+    localStorage.setItem("retrievedURL", url);
+    console.log("URL STORED!", url);
+    const newUrl = `/watchPage/${url}`;
+    window.location.href = newUrl;
 }
 
 let slideIndex = 1;
