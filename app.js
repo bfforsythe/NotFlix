@@ -7,7 +7,7 @@ const session = require('express-session');
 
 // Program constant variables
 const databaseName = "Notflix";
-const userColl = "users";
+const userColl = "fortnite";
 const movieColl = "movies";
 const loginAttempts = 3;
 const genres = ["Action","Horror","Romance"];
@@ -31,7 +31,7 @@ app.use(session({
 const uri = "mongodb://127.0.0.1:27017";
 
 // set website port
-app.listen(8888);
+app.listen(5000);
 
 /////// post requests ///////
 app.post('/goHome', (req,res)=>{
@@ -47,7 +47,7 @@ app.post('/login', async (req, res) => {
     if (user) {
         console.log("Login Successful");
         req.session.user = user;
-        res.redirect('/watchPage');
+        res.redirect('/browsingPage');
     } else {
         console.log("Login Failed");
         remainingAttempts--;
@@ -140,7 +140,17 @@ app.get('/sign-up',(req,res) =>{
 app.get('/upload', (req,res)=>{
     movie = req.session.movie
     res.render("upload",{genres, movie})
-});    
+});
+
+app.get('/browsingPage', async (req,res) =>{
+    const user = req.session.user;
+    const [urlData] = await Promise.all([storeMovies(), ]);
+    const urls = urlData.map(movie => movie.url);
+    console.log("-----------URLS-------------", urls);
+
+
+    res.render("browsingPage", {user, urls});
+})
 
 // 404 page
 app.use((req,res) =>{
@@ -310,6 +320,33 @@ async function addView(id) {
         return;
     } catch (error) {
         console.error("Database error: ", error);
+    } finally {
+        await client.close();
+    }
+}
+
+
+
+
+//Store Movies
+// takes nothing
+// returns array of urls
+async function storeMovies() {
+    const client = new MongoClient(uri);
+    const projection = {_id:0, url:1, genre:0, description:0, views:0};
+
+    try {
+        await client.connect();
+        const db = client.db("Notflix");
+        const coll = db.collection("movies");
+
+        const cursor = await coll.find({}, projection);
+        const result = await cursor.toArray();
+        console.log("------RESULT--------- ", result);
+        return result;
+    } catch (error) {
+        console.error("DB Error: ", error);
+        throw error;
     } finally {
         await client.close();
     }

@@ -1,12 +1,79 @@
+<!-- Loop a function that adds continuous images based on how many urls they are
+     the urls function as hyperlinks to an image, on click redirect to watchPage, easy. -->
+<style>
+    Body {
+        background: rgb(45,160,184);
+        background: linear-gradient( rgba(45,160,184,1) 2%, rgba(2,0,36,0.7792366946778712) 16%, rgba(9,115,121,1) 92%);
+        }
+        .slideshow-group {
+        display: flex;
+        justify-content: center;
+        }
+</style>
 
-<%- include('./partials/head.ejs') %>
+<%- include('./partials/carousel.ejs') %>
 
 <body>
+    <div class="slideshow-container">
+        <% for (let i = 0; i < urls.length; i += 4) { %>
+          <div class="slideshow-group">
+            <% for (let j = i; j < i + 4 && j < urls.length; j++) { %>
+                <div class="mySlides fade">
+                    <img height="100px" width="200px" src="https://i.ytimg.com/vi/<%= urls[j] %>/maxresdefault.jpg" onclick="storeURL('<%= urls[j] %>')">
+                </div>    
+            <% } %>
+          
+        <% } %>
+        <a class="prev" onclick="plusSlides(-1)">❮</a>
+        <a class="next" onclick="plusSlides(1)">❯</a>
+      </div>
 
-    <% for(i=0; i<5; i++) { %>
-        <div class="genreBrowser">
-            <p>You did it <% i %></p>
-        </div>
-    <% } %>
 
 </body>
+
+
+<script>
+
+
+function storeURL(urls, j) {
+    var savedURL = urls[j];
+    localStorage.setItem("retrievedURL", savedURL);
+    console.log("URL STORED!");
+}
+
+let slideIndex = 1;
+showSlides(slideIndex);
+
+// Next/previous controls
+function plusSlides(n) {
+  showSlides(slideIndex += n);
+}
+
+// Thumbnail image controls
+function currentSlide(n) {
+  showSlides(slideIndex = n);
+}
+
+function showSlides(n) {
+  let i;
+  let slides = document.getElementsByClassName("mySlides");
+
+  if (n > Math.ceil(slides.length/4)) {slideIndex = 1} // Calculates the total maximum number of "pages" (i'm so proud of this :^) )
+  if (n < 1) {slideIndex = Math.ceil(slides.length/4)}
+  for (i = 0; i < slides.length; i++) {
+    slides[i].style.display = "none";
+  }
+  
+  let start = (slideIndex-1)*4;
+  let end = start+4;
+  for (i = start; i < end && i < slides.length; i++) {
+    slides[i].style.display = "block";
+  }
+
+  // hide remaining slides
+  for (i = end; i < slides.length; i++) {
+    slides[i].style.display = "none";
+  }
+}
+
+</script>
