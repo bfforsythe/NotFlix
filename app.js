@@ -114,7 +114,7 @@ app.post('/uploadMovie',async (req,res)=>{
         req.session.movie = ""
     }
     console.log("Movie Uploaded")
-    res.redirect("/");
+    res.redirect('/browsingPage');
 });
 
 /////// website directories ///////
