@@ -7,7 +7,7 @@ const session = require('express-session');
 
 // Program constant variables
 const databaseName = "Notflix";
-const userColl = "users";
+const userColl = "fortnite";
 const movieColl = "movies";
 const loginAttempts = 3;
 const genres = ["Action","Horror","Romance"];
@@ -101,10 +101,9 @@ app.post('/uploadMovie',async (req,res)=>{
         url:req.body.ID,
         genre:req.body.genre,
         description:req.body.description,
-        views:req.body.views
+        views:0
     }
     var previousEntry = await findMovie(obj.url);
-    console.log("PREEEEEEVIOUS IS: ", previousEntry);
     if(!previousEntry){
         addMovie(obj).catch(console.dir);
     }else{
@@ -139,7 +138,6 @@ app.get('/sign-up',(req,res) =>{
 
 app.get('/upload', (req,res)=>{
     movie = req.session.movie
-    console.log("VIEWSSS",movie.views);
     res.render("upload",{genres, movie})
 });
 

@@ -29,9 +29,9 @@
     
     <div id="action-slides" class="slideshow-container">
       <p1>Action</p1>
-        <% for (let i = 0; i < newMovieGenres.Action.length; i += 4) { %>
+        <% for (let i = 0; i < newMovieGenres.Action.length; i += 100) { %>
           <div class="slideshow-group">
-            <% for (let j = i; j < i + 4 && j < newMovieGenres.Action.length; j++) { %>
+            <% for (let j = i; j < i + 100 && j < newMovieGenres.Action.length; j++) { %>
                 <div class="mySlides fade">
                         <img height="100px" width="200px" src="https://i.ytimg.com/vi/<%= newMovieGenres.Action[j] %>/maxresdefault.jpg" onclick="storeURL('<%= newMovieGenres.Action[j] %>')">
                     </div>  
@@ -48,9 +48,9 @@
       
       <div id="horror-slides" class="slideshow-container">
         <p1> Horror </p1>
-        <% for (let i = 0; i < newMovieGenres.Horror.length; i += 4) { %>
+        <% for (let i = 0; i < newMovieGenres.Horror.length; i += 100) { %>
           <div class="slideshow-group">
-            <% for (let j = i; j < i + 4 && j < newMovieGenres.Horror.length; j++) { %>
+            <% for (let j = i; j < i + 100 && j < newMovieGenres.Horror.length; j++) { %>
                 <div class="mySlides fade">
                         <img height="100px" width="200px" src="https://i.ytimg.com/vi/<%= newMovieGenres.Horror[j] %>/maxresdefault.jpg" onclick="storeURL('<%= newMovieGenres.Horror[j] %>')">
                     </div>  
@@ -67,9 +67,9 @@
       
       <div id="romance-slides" class="slideshow-container">
         <p1> Romance </p1>
-        <% for (let i = 0; i < newMovieGenres.Romance.length; i += 4) { %>
+        <% for (let i = 0; i < newMovieGenres.Romance.length; i += 100) { %>
           <div class="slideshow-group">
-            <% for (let j = i; j < i + 4 && j < newMovieGenres.Romance.length; j++) { %>
+            <% for (let j = i; j < i + 100 && j < newMovieGenres.Romance.length; j++) { %>
                 <div class="mySlides fade">
                         <img height="100px" width="200px" src="https://i.ytimg.com/vi/<%= newMovieGenres.Romance[j] %>/maxresdefault.jpg" onclick="storeURL('<%= newMovieGenres.Romance[j] %>')">
                     </div>  
@@ -121,18 +121,24 @@ var slideshow1 = document.getElementById("action-slides");
   
   
   
-  function showSlides(n, slideshow) {
-    slideshow.currentSlideIndex = n;
-    var i;
-    var slides = slideshow.getElementsByClassName("mySlides");
-    if (n > slides.length) {slideshow.currentSlideIndex = 1}    
-    if (n < 1) {slideshow.currentSlideIndex = slides.length}
-    for (i = 0; i < slides.length; i++) {
-        slides[i].style.display = "none";  
-    }
-    slides[slideshow.currentSlideIndex-1].style.display = "block";
-    
-    
+function showSlides(n, slideshow) {
+  slideshow.currentSlideIndex = n;
+  var i;
+  var slides = slideshow.getElementsByClassName("mySlides");
+  var startIndex = (n - 1) * 4;
+  var endIndex = startIndex + 4;
+  if (endIndex > slides.length) {
+    endIndex = slides.length;
+    startIndex = endIndex - 4;
   }
+  for (i = 0; i < slides.length; i++) {
+    if (i >= startIndex && i < endIndex) {
+      slides[i].style.display = "block";
+    } else {
+      slides[i].style.display = "none";
+    }
+  }
+}
+
 
 </script>
