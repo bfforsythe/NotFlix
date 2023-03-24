@@ -7,7 +7,7 @@ const session = require('express-session');
 
 // Program constant variables
 const databaseName = "Notflix";
-const userColl = "users";
+const userColl = "fortnite";
 const movieColl = "movies";
 const loginAttempts = 3;
 const genres = ["Action","Horror","Romance"];

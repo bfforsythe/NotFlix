@@ -27,7 +27,7 @@
 
 
     
-    <div class="slideshow-container">
+    <div id="action-slides" class="slideshow-container">
       <p1>Action</p1>
         <% for (let i = 0; i < newMovieGenres.Action.length; i += 4) { %>
           <div class="slideshow-group">
@@ -38,14 +38,15 @@
             <% } %>
           
         <% } %>
-        <a class="prev" onclick="plusSlides(-1)">❮</a>
-        <a class="next" onclick="plusSlides(1)">❯</a>
+        <a class="prev" onclick="plusSlides(-1, slideshow1)">❮</a>
+        <a class="next" onclick="plusSlides(1, slideshow1)">❯</a>
       </div>
+    </div>
 
       <!-- Horror Slides -->
 
       
-      <div class="slideshow-container">
+      <div id="horror-slides" class="slideshow-container">
         <p1> Horror </p1>
         <% for (let i = 0; i < newMovieGenres.Horror.length; i += 4) { %>
           <div class="slideshow-group">
@@ -56,15 +57,15 @@
             <% } %>
           
         <% } %>
-        <a class="prev" onclick="plusSlides(-1)">❮</a>
-        <a class="next" onclick="plusSlides(1)">❯</a>
+        <a class="prev" onclick="plusSlides(-1,slideshow2)">❮</a>
+        <a class="next" onclick="plusSlides(1,slideshow2)">❯</a>
+        </div>
       </div>
-
 
       <!-- Romance Slides -->
 
       
-      <div class="slideshow-container">
+      <div id="romance-slides" class="slideshow-container">
         <p1> Romance </p1>
         <% for (let i = 0; i < newMovieGenres.Romance.length; i += 4) { %>
           <div class="slideshow-group">
@@ -75,10 +76,12 @@
             <% } %>
           
         <% } %>
-        <a class="prev" onclick="plusSlides(-1)">❮</a>
-        <a class="next" onclick="plusSlides(1)">❯</a>
+        <center>
+        <a class="prev" onclick="plusSlides(-1,slideshow3)">❮</a>
+        <a class="next" onclick="plusSlides(1,slideshow3)">❯</a>
+      </center>
+        </div>
       </div>
-      
 
 
 </body>
@@ -94,39 +97,42 @@ function storeURL(url) {
     window.location.href = newUrl;
 }
 
-let slideIndex = 1;
-showSlides(slideIndex);
-
-// Next/previous controls
-function plusSlides(n) {
-  showSlides(slideIndex += n);
-}
-
-// Thumbnail image controls
-function currentSlide(n) {
-  showSlides(slideIndex = n);
-}
-
-function showSlides(n) {
-  let i;
-  let slides = document.getElementsByClassName("mySlides");
-
-  if (n > Math.ceil(slides.length/4)) {slideIndex = 1} // Calculates the total maximum number of "pages" (i'm so proud of this :^) )
-  if (n < 1) {slideIndex = Math.ceil(slides.length/4)}
-  for (i = 0; i < slides.length; i++) {
-    slides[i].style.display = "none";
+var slideshow1 = document.getElementById("action-slides");
+  slideshow1.currentSlideIndex = 1;
+  showSlides(slideshow1.currentSlideIndex, slideshow1);
+  
+  var slideshow2 = document.getElementById("horror-slides");
+  slideshow2.currentSlideIndex = 1;
+  showSlides(slideshow2.currentSlideIndex, slideshow2);
+  
+  var slideshow3 = document.getElementById("romance-slides");
+  slideshow3.currentSlideIndex = 1;
+  showSlides(slideshow3.currentSlideIndex, slideshow3);
+  
+  
+  function plusSlides(n, slideshow) {
+    showSlides(slideshow.currentSlideIndex += n, slideshow);
+    console.log("MOVING SLIDES!!!!");
   }
   
-  let start = (slideIndex-1)*4;
-  let end = start+4;
-  for (i = start; i < end && i < slides.length; i++) {
-    slides[i].style.display = "block";
+  function currentSlide(n, slideshow) {
+    showSlides(slideshow.currentSlideIndex = n, slideshow);
   }
-
-  // hide remaining slides
-  for (i = end; i < slides.length; i++) {
-    slides[i].style.display = "none";
+  
+  
+  
+  function showSlides(n, slideshow) {
+    slideshow.currentSlideIndex = n;
+    var i;
+    var slides = slideshow.getElementsByClassName("mySlides");
+    if (n > slides.length) {slideshow.currentSlideIndex = 1}    
+    if (n < 1) {slideshow.currentSlideIndex = slides.length}
+    for (i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";  
+    }
+    slides[slideshow.currentSlideIndex-1].style.display = "block";
+    
+    
   }
-}
 
 </script>
