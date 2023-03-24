@@ -7,7 +7,7 @@ const session = require('express-session');
 
 // Program constant variables
 const databaseName = "Notflix";
-const userColl = "fortnite";
+const userColl = "users";
 const movieColl = "movies";
 const loginAttempts = 3;
 const genres = ["Action","Horror","Romance"];
@@ -103,13 +103,11 @@ app.post('/uploadMovie',async (req,res)=>{
         description:req.body.description,
         views:0
     }
-    var previousEntry = findMovie(obj.title)
+    var previousEntry = await findMovie(obj.url);
     if(!previousEntry){
         addMovie(obj).catch(console.dir);
     }else{
-        // shoulve done something with upsert, but it does work
-        // https://www.mongodb.com/docs/manual/reference/method/db.collection.update/
-        deleteMovie(await getMovieID(obj.title)).catch(console.dir);
+        deleteMovie(await getMovieID(obj.url)).catch(console.dir);
         addMovie(obj).catch(console.dir);
         req.session.movie = ""
     }
@@ -344,7 +342,7 @@ async function storeMovies() {
 
         const cursor = await coll.find({}, projection);
         const result = await cursor.toArray();
-        console.log("------RESULT--------- ", result);
+        //console.log("------RESULT--------- ", result);
         return result;
     } catch (error) {
         console.error("DB Error: ", error);
