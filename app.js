@@ -95,6 +95,12 @@ app.post('/edit',(req,res) =>{
     res.redirect('upload');
 });
 
+app.post('/delete', async (req,res) => {
+    deleteMovie(await getMovieID(req.body.url)).catch(console.dir);
+
+    res.redirect('/browsingPage');
+});
+
 app.post('/uploadMovie',async (req,res)=>{
     var obj = {
         title:req.body.title,

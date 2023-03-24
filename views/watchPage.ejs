@@ -43,6 +43,12 @@
                         <button type="submit">Edit</button>
                     </form>
                 </div>
+                <div style="margin-left:60%; height:40px;">
+                    <form action="/delete" method="post" type="hidden">
+                        <button type="submit">Delete</button>
+                        <input type="hidden" id="url" name="url" value="<%= vidData.url %>">
+                    </form>
+                </div>
             <% }else{ %>
                 <div style="margin-left: 50%; height: 40px;" name="views"></div>
             <% } %>
