@@ -16,62 +16,63 @@
 <%- include('./partials/head.ejs') %>
 
 <body>
-    <%- include('./partials/nav.ejs') %>
+    <div class="center">
+        <%- include('./partials/nav.ejs') %>
 
-    <% if(response == "createdAccount") {%>
-        <script>
-            alert("Account successfully created");
-        </script>
-    <% } %>
-    <% if(response == "loginFail"){%>
-        <script>
-            alert("Username or password is incorrect.");
-        </script>
-    <% } %>
-    <% if(response == "passwordUsername"){%>
-        <script>
-            alert("Password cannot contain the username.");
-        </script>
-    <% } %>
+        <% if(response == "createdAccount") {%>
+            <script>
+                alert("Account successfully created");
+            </script>
+        <% } %>
+        <% if(response == "loginFail"){%>
+            <script>
+                alert("Username or password is incorrect.");
+            </script>
+        <% } %>
+        <% if(response == "passwordUsername"){%>
+            <script>
+                alert("Password cannot contain the username.");
+            </script>
+        <% } %>
 
-    <div class="wrapper">
-        <div class="titleRectangle">
-            <h1> NotFlix Login</h1>
-        </div>
-        <% if(remainingAttempts > 0){ %>
-        <form action="/login" method="post">
-            <div class="hcSquare">
-
-                    <label> Username: </label>
-                    <input type="text" placeholder="Enter Username" id="username" name="username" required>
-                    <br>
-                    <label>Password: </label>
-                    <input type="password" placeholder="Enter Password" id="password" name="password" required>
-                    <input type="checkbox" id="show" name="show" class="showPassButton" onclick="showPassword()">👁
-
-                    <br>
-                    <button type="submit"> Login</button>
-                    <!--<input type="checkbox" check="checked"> Remember Me-->
-
-                    <!--Remove hidden input later-->
-                    <input type="hidden" id="remainingAttempts" name="remainingAttempts" value="<%= remainingAttempts %>">
-                    
-                        <br><br>
-                    <!--  div class="subText"> New to Notflix?: <a href="./signup.html"> Sign up</a></div>  -->
-                    <nav>
-                        <a href="/signup">Sign up</a>
-                    </nav>
+        <div class="wrapper">
+            <div class="titleRectangle">
+                <h1> NotFlix Login</h1>
             </div>
-            <% }else{ %>
+            <% if(remainingAttempts > 0){ %>
+            <form action="/login" method="post">
                 <div class="hcSquare">
-                    <p>Too many failed login attempts.</p>
-                    <p>Try again later</p>
+
+                        <label> Username: </label>
+                        <input type="text" placeholder="Enter Username" id="username" name="username" required>
+                        <br>
+                        <label>Password: </label>
+                        <input type="password" placeholder="Enter Password" id="password" name="password" required>
+                        <input type="checkbox" id="show" name="show" class="showPassButton" onclick="showPassword()">👁
+
+                        <br>
+                        <button type="submit"> Login</button>
+                        <!--<input type="checkbox" check="checked"> Remember Me-->
+
+                        <!--Remove hidden input later-->
+                        <input type="hidden" id="remainingAttempts" name="remainingAttempts" value="<%= remainingAttempts %>">
+                        
+                            <br><br>
+                        <!--  div class="subText"> New to Notflix?: <a href="./signup.html"> Sign up</a></div>  -->
+                        <nav>
+                            <a href="/signup">Sign up</a>
+                        </nav>
                 </div>
-            <% } %>
-        </form>
-    </div>
-    
+                <% }else{ %>
+                    <div class="hcSquare">
+                        <p>Too many failed login attempts.</p>
+                        <p>Try again later</p>
+                    </div>
+                <% } %>
+            </form>
+        </div>
     <%- include('./partials/footer.ejs') %>
+    </div>
 </body>
 
 <script>

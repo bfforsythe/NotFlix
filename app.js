@@ -11,6 +11,7 @@ const userColl = "fortnite";
 const movieColl = "movies";
 const loginAttempts = 3;
 const genres = ["Action","Horror","Romance"];
+const PORT = 5000;
 
 
 // register view engine
@@ -31,10 +32,11 @@ app.use(session({
 const uri = "mongodb://127.0.0.1:27017";
 
 // set website port
-app.listen(5000);
+app.listen(PORT);
 
 /////// post requests ///////
-app.post('/goHome', (req,res)=>{
+app.post('/logout', (req,res)=>{
+    req.session.destroy();
     res.redirect('/');
 });
 
@@ -143,8 +145,9 @@ app.get('/sign-up',(req,res) =>{
 });
 
 app.get('/upload', (req,res)=>{
+    const user = req.session.user;
     movie = req.session.movie
-    res.render("upload",{genres, movie})
+    res.render("upload",{user, genres, movie})
 });
 
 app.get('/browsingPage', async (req,res) =>{

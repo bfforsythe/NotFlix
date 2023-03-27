@@ -1,19 +1,60 @@
 <style>
+    .navBar{
+        width: flex;
+        height: flex;
+    }
     .navSquare{
         background-color: white;
-        width:60;
-        height:flex;
-        padding: 20%;
+        padding: 10px;
+    }
+    li {
+        color: #111;
+        float: left;
+        padding-right: 10px;
+        padding-left: 10px;
+        border-right: 1px solid #bbb;
+    }
+    li:last-child{
+        border-right: none;
+    }
+    li a:hover {
+        color: #2bf1ff;
+    }
+    ul {
+        list-style-type: none;
+        overflow: hidden;
     }
 </style>
 
 <div class="navBar">
     <div class="navSquare">
-            <nav>
-                <a href="/">Home</a>
-            </nav>
-            <nav>
-                <a href="/signup">Sign up</a>
-            </nav>
+        <ul>
+            <% if (typeof user == 'undefined') { %>
+            <li>
+                <nav>
+                    <a href="/signup">Sign up</a>
+                </nav>
+            </li>
+            <% }else{ %>
+                <li>
+                    <nav>
+                        <a href="/browsingPage">Home</a>
+                    </nav>
+                </li>
+                <% if(user.accountType == 'editor'){ %>
+                <li>
+                    <nav>
+                        <a href="/upload">Upload</a>
+                    </nav>
+                </li>
+                <% } %> 
+                <li>
+                    <form id="logout" action="/logout" method="post" type="hidden">
+                        <button type="submit">Log Out</button>
+                    </form>
+                </li>
+            <% } %>
+        </ul>
     </div>
 </div>
+<br>

@@ -17,9 +17,10 @@
 
 <body>
 
-<form id="redirectMe" action="/goHome" method="post" type="hidden"></form>
+<form id="logout" action="/logout" method="post" type="hidden"></form>
 
 <div class="center">
+    <%- include('./partials/nav.ejs') %>
     <div style="text-align: center; font-size: 20;" name="title"><%= vidData.title  %></div>
     <div name="video">
         <a referrerpolicy="origin-when-cross-origin">
@@ -72,7 +73,7 @@
     function checkActivity(){
         var state = player.getPlayerState();
         if(Date.now() - lastInteration > logoutTime && state != 1 && state != 3){
-            document.getElementById("redirectMe").submit();
+            document.getElementById("logout").submit();
         }
     }
 

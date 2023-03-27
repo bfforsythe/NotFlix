@@ -3,10 +3,10 @@
 </head>
 
 <%- include('./partials/head.ejs') %>
-<%- include('./partials/nav.ejs') %>
 
 <body>
     <div class="wrapper">
+        <%- include('./partials/nav.ejs') %>
     <form action="/uploadMovie" method="post" id="movieForm">
         <div class="hcSquare">
             <% if(movie){ %>
