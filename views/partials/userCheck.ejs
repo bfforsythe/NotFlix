@@ -1,0 +1,8 @@
+<div>
+    <form id="logout" action="/logout" method="post" type="hidden"></form>
+    <% if(typeof user == 'undefined'){ %>
+        <script>
+                document.getElementById("logout").submit();
+        </script>
+    <% } %>
+</div>
