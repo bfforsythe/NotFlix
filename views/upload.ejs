@@ -10,28 +10,15 @@
         <%- include('./partials/nav.ejs') %>
     <form action="/uploadMovie" method="post" id="movieForm">
         <div class="hcSquare">
-            <% if(movie){ %>
-            <% var title = movie.title; %>
-            <% var url = movie.url; %>
-            <% var description = movie.description; %>
-            <% var genre = movie.genre; %>
-            <% var views = movie.views; %>
-            <% }else{ %>
-            <% var title = ""; %>
-            <% var url = ""; %>
-            <% var description = ""; %>
-            <% var genre = ""; %>
-            <% var views = 0; %>
-            <% } %>
-            <input type="hidden" id="views" name="views" value="<%= views %>">
+            <input type="hidden" id="views" name="views" value="<%= movie.views %>">
             <label> Title: </label>
-                <input type="text" placeholder="Enter Title" id="title" name="title" value="<%= title %>" required>
+                <input type="text" placeholder="Enter Title" id="title" name="title" value="<%= movie.title %>" required>
                 <br>
             <label> Video ID: </label>
-                <input type="text" placeholder="Enter ID" id="ID" name="ID" value="<%= url %>" required>
+                <input type="text" placeholder="Enter ID" id="ID" name="ID" value="<%= movie.url %>" required>
                 <br>
             <label> Genre:</label>
-                <select id="genre" name="genre" value="<%= genre %>" required>
+                <select id="genre" name="genre" value="<%= movie.genre %>" required>
                     <option selected disabled hidden>Select</option>
                     <% for(var i = 0; i < genres.length;i++){ %>
                         <% if (genre == genres[i]){ %>
@@ -43,7 +30,7 @@
                 </select>
                 <br>
             <label> Description: </label>
-                <input type="text" placeholder="Enter Description" id="description" name="description" value="<%= description %>" required>
+                <input type="text" placeholder="Enter Description" id="description" name="description" value="<%= movie.description %>" required>
                 <br>
             <button type="button" onclick="submitForm()"> Upload</button>
         </div>

@@ -48,24 +48,23 @@ input.showPassButton{
     <form action="/createUser" method="post">
 
       <!-- Create username and password box -->
-
-
+      <%= console.log(prefillData); %>
       <div class="hcSquare">
         <div>
           <label> First Name: </label>
-          <input type="text" placeholder="Enter your first name" id="firstName" name="firstName" required>
+          <input type="text" placeholder="Enter your first name" id="firstName" name="firstName" value="<%= prefillData.firstName %>" required>
         </div>
         <div>
           <label> Last Name: </label>
-          <input type="text" placeholder="Enter your last name" id="lastName" name="lastName" required>
+          <input type="text" placeholder="Enter your last name" id="lastName" name="lastName" value="<%= prefillData.lastName %>" required>
         </div>
         <div>
           <label> Username: </label>
-          <input type="text" placeholder="Create a Username" id="username" name="username" pattern="(?=.*\d)(?=.*[@$!%*?&])(?=.*[A-Z]).{8,}" required>
+          <input type="text" placeholder="Create a Username" id="username" name="username" pattern="(?=.*\d)(?=.*[@$!%*?&])(?=.*[A-Z]).{8,}" value="<%= prefillData.username %>" required>
         </div>
         <div>
           <label> Email: </label>
-          <input type="text" placeholder="Enter your email" id="email" name="email" required>
+          <input type="text" placeholder="Enter your email" id="email" name="email" value="<%= prefillData.email %>" required>
         </div>
         <div>
           <label>Password:</label>
@@ -74,11 +73,11 @@ input.showPassButton{
         </div>
         <div>
           <label>Mothers maiden name:</label>
-          <input type="text" placeholder="Enter Answer" id="question1" name="question1" required>
+          <input type="text" placeholder="Enter Answer" id="question1" name="question1" value="<%= prefillData.question1 %>" required>
         </div>
         <div>
           <label>City of birth:</label>
-          <input type="text" placeholder="Enter Answer" id="question2" name="question2" required>
+          <input type="text" placeholder="Enter Answer" id="question2" name="question2" value="<%= prefillData.question2 %>" required>
         </div>
 
 

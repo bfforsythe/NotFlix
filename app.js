@@ -61,13 +61,22 @@ app.post('/login', async (req, res) => {
 app.post('/createUser', async (req,res)=>{
     // write to saved file a new user
     const currUser = await checkAvailability(req.body.username);
+    prefillData = {
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        username: req.body.username,
+        email: req.body.email,
+        question1: req.body.question1,
+        question2: req.body.question2
+
+    }
 
     if(currUser){
         console.log("username taken");
-        res.render('signup',{response: "usernameTaken"});
+        res.render('signup',{prefillData, response: "usernameTaken"});
     }else if(req.body.password.includes(req.body.username)){
         console.log("Password cannot contain username");
-        res.render('signup',{response: "passwordUsername"});
+        res.render('signup',{prefillData, response: "passwordUsername"});
     }else{
         var obj = {
             username: req.body.username,
@@ -137,7 +146,16 @@ app.get('/watchPage/:url', async (req, res) => {
 });
 
 app.get('/signup', (req, res) =>{
-    res.render('signup',{response:""});
+    prefillData = {
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        username: req.body.username,
+        email: req.body.email,
+        question1: req.body.question1,
+        question2: req.body.question2
+
+    }
+    res.render('signup',{prefillData, response:""});
 });
 
 app.get('/sign-up',(req,res) =>{
