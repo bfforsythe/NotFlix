@@ -34,22 +34,30 @@
             <% if(user.accountType == "marketing") {%>
                 <div style="margin-left: 50%; height: 40px;" name="views">Views: <%= vidData.views %></div>
             <% }else if(user.accountType == "editor"){ %>
-                <div style="margin-left: 50%; height: 40px;" name="views">
-                    <form id="goUpload" action="/edit" method="post" type="hidden">
-                        <input type="hidden" id="title" name="title" value="<%= vidData.title %>">
-                        <input type="hidden" id="url" name="url" value="<%= vidData.url %>">
-                        <input type="hidden" id="genre" name="genre" value="<%= vidData.genre %>">
-                        <input type="hidden" id="description" name="description" value="<%= vidData.description %>">
-                        <input type="hidden" id="views" name="views" value="<%= vidData.views %>">
-                        
-                        <button type="submit">Edit</button>
-                    </form>
-                </div>
-                <div style="margin-left:60%; height:40px;">
-                    <form action="/delete" method="post" type="hidden">
-                        <button type="submit">Delete</button>
-                        <input type="hidden" id="url" name="url" value="<%= vidData.url %>">
-                    </form>
+                <div style="margin-left: 50%; height: 40px;">
+                    <ul style="list-style-type: none; overflow: hidden;">
+                        <li style="padding-left: 0; border-right: none;">
+                        <div  name="views">
+                            <form id="goUpload" action="/edit" method="post" type="hidden">
+                                <input type="hidden" id="title" name="title" value="<%= vidData.title %>">
+                                <input type="hidden" id="url" name="url" value="<%= vidData.url %>">
+                                <input type="hidden" id="genre" name="genre" value="<%= vidData.genre %>">
+                                <input type="hidden" id="description" name="description" value="<%= vidData.description %>">
+                                <input type="hidden" id="views" name="views" value="<%= vidData.views %>">
+                                
+                                <button type="submit">Edit</button>
+                            </form>
+                        </div>
+                        </li>
+                        <li >
+                        <div style="margin-left:50%;">
+                            <form action="/delete" method="post" type="hidden">
+                                <button type="submit">Delete</button>
+                                <input type="hidden" id="url" name="url" value="<%= vidData.url %>">
+                            </form>
+                        </div>
+                        </li>
+                    </ul>
                 </div>
             <% }else{ %>
                 <div style="margin-left: 50%; height: 40px;" name="views"></div>
