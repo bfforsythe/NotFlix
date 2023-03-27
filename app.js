@@ -165,7 +165,13 @@ app.get('/sign-up',(req,res) =>{
 app.get('/upload', (req,res)=>{
     const user = req.session.user;
     movie = req.session.movie
+    req.session.movie = 'undefined';
     res.render("upload",{user, genres, movie})
+});
+
+app.get('/uploadHelp', (req,res)=>{
+    const user = req.session.user;
+    res.render("uploadHelp", {user})
 });
 
 app.get('/browsingPage', async (req,res) =>{
