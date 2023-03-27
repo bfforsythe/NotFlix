@@ -27,10 +27,11 @@
 </style>
 
 <div class="navBar">
+    <div class="navSquare">
         <ul>
             <% if (typeof user == 'undefined') { %>
             <li>
-                <nav style="background-color:white;">
+                <nav>
                     <a href="/signup">Sign up</a>
                 </nav>
             </li>
@@ -54,5 +55,6 @@
                 </li>
             <% } %>
         </ul>
+    </div>
 </div>
 <br>
