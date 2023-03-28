@@ -4,22 +4,16 @@
 
 Notflix is a simple and easy to set up video watching server platform.
 
-## Dependencies
-
-* nodejs
-* express
-* express-session
-* mongodb
-
 ## Setup
 
 Setup Steps
 1. Install MongoDB Community Server at https://www.mongodb.com/try/download/community:
 2. Clone repository onto machine
-3. Install dependencies
-4. Create MongoDB database called "Notflix"
-5. Create two MongoDB collections in database called "movies" and "fortnite"
-6. In local repository run "node .\app.js"
+3. If you do not have npm installed, install it, you can check your version with "npm -v"
+4. Install dependencies by running npm install
+5. Create MongoDB database called "Notflix"
+6. Create two MongoDB collections in database called "movies" and "fortnite"
+7. In local repository run "node .\app.js"
 
 ## Usage
 
