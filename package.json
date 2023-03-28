@@ -1,0 +1,23 @@
+{
+  "name": "notflix",
+  "version": "1.0.0",
+  "description": "dependencies for the notflix video watching website",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/segallagher/NotFlix.git"
+  },
+  "keywords": [
+    "fortnite",
+    "movies"
+  ],
+  "author": "ChittR LLC",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/segallagher/NotFlix/issues"
+  },
+  "homepage": "https://github.com/segallagher/NotFlix#readme"
+}
