@@ -60,7 +60,7 @@ input.showPassButton{
         </div>
         <div>
           <label> Username: </label>
-          <input type="text" placeholder="Create a Username" id="username" name="username" pattern="(?=.*\d)(?=.*[@$!%*?&])(?=.*[A-Z]).{8,}" value="<%= prefillData.username %>" required>
+          <input type="text" placeholder="Create a Username" id="username" name="username" pattern="^(?=.*\d)(?=.*[@$!%*?&])(?=.*[A-Z])\S{8,}$" value="<%= prefillData.username %>" required>
         </div>
         <div>
           <label> Email: </label>
@@ -68,7 +68,7 @@ input.showPassButton{
         </div>
         <div>
           <label>Password:</label>
-          <input type="password" placeholder="Create a Password" id="password" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[@$!%*?&])(?=.*[A-Z]).{10,}" required>
+          <input type="password" placeholder="Create a Password" id="password" name="password" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[@$!%*?&])(?=.*[A-Z])\S{10,}$" required>
           <input type="checkbox" class="showPassButton" onclick="showPassword()">
         </div>
         <div>
