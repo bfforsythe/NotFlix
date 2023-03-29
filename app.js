@@ -1,4 +1,3 @@
-const fs = require('fs');
 const express = require('express');
 const path = require('path');
 const app = express();
@@ -78,6 +77,8 @@ app.post('/createUser', async (req,res)=>{
         console.log("Password cannot contain username");
         res.render('signup',{prefillData, response: "passwordUsername"});
     }else{
+        var currTime = new Date()
+        currTime.toLocaleString('en', {timeZone:'America/New_York'});
         var obj = {
             username: req.body.username,
             password: req.body.password,
@@ -86,7 +87,9 @@ app.post('/createUser', async (req,res)=>{
                 "Mothers maiden name": req.body.question1,
                 "City of birth": req.body.question2
             },
-            accountType: "user"
+            accountType: "user",
+            loginAttempts: 3,
+            lock: currTime
         };
         addUser(obj).catch(console.dir);
         
@@ -361,7 +364,7 @@ async function addView(id) {
 
 
 
-//Store Movies
+// storeMovies
 // takes nothing
 // returns array of urls
 async function storeMovies() {
@@ -370,8 +373,8 @@ async function storeMovies() {
 
     try {
         await client.connect();
-        const db = client.db("Notflix");
-        const coll = db.collection("movies");
+        const db = client.db(databaseName);
+        const coll = db.collection(movieColl);
 
         const cursor = await coll.find({}, projection);
         const result = await cursor.toArray();
@@ -384,5 +387,3 @@ async function storeMovies() {
         await client.close();
     }
 }
-  
-  
