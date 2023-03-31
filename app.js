@@ -8,9 +8,11 @@ const session = require('express-session');
 const databaseName = "Notflix";
 const userColl = "fortnite";
 const movieColl = "movies";
-const loginAttempts = 3;
 const genres = ["Action","Horror","Romance"];
 const PORT = 5000;
+const loginAttempts = 3;
+const loginRefreshMin = 60;
+const lockDurationHours = 1;
 
 
 // register view engine
@@ -40,25 +42,33 @@ app.post('/logout', (req,res)=>{
 });
 
 app.post('/login', async (req, res) => {
-    const username = req.body.username;
-    const password = req.body.password;
-    const user = await checkCredentials(username, password);
-    var remainingAttempts = req.body.remainingAttempts;
+    const user = await checkCredentials(req.body.username, req.body.password);
     
-    if (user) {
-        console.log("Login Successful");
-        req.session.user = user;
-        res.redirect('/browsingPage');
-    } else {
-        console.log("Login Failed");
-        remainingAttempts--;
-        console.log("Username or password incorrect\n " + remainingAttempts + " attempts remaining");
-        res.render('nfLogin',{remainingAttempts: remainingAttempts, response: "loginFail"});
+    refreshAttempts(req.body.username)
+
+    const remainingAttempts = await useAttempt(req.body.username);
+    if(remainingAttempts < 0){
+        lockAccount(req.body.username);
     }
+    var lock = await checkLock(req.body.username)
+    if(lock && new Date() < lock){
+        console.log("Account Locked");
+        res.render('nfLogin',{response: "locked"});
+        return;
+    }
+    if(!user){
+        console.log("Login Failed");
+        res.render('nfLogin',{response: "loginFail"});
+        return;
+    }
+
+    refreshAttempts(user.username,true);
+    console.log("Login Successful");
+    req.session.user = user;
+    res.redirect('/browsingPage');
 });
 
 app.post('/createUser', async (req,res)=>{
-    // write to saved file a new user
     const currUser = await checkAvailability(req.body.username);
     prefillData = {
         firstName: req.body.firstName,
@@ -79,7 +89,7 @@ app.post('/createUser', async (req,res)=>{
     }else{
         var currTime = new Date()
         currTime.toLocaleString('en', {timeZone:'America/New_York'});
-        var newMovie = {
+        var newUser = {
             username: req.body.username,
             password: req.body.password,
             email: req.body.email,
@@ -89,12 +99,13 @@ app.post('/createUser', async (req,res)=>{
             },
             accountType: "user",
             loginAttempts: 3,
+            loginRefresh: currTime,
             lock: currTime
         };
-        addUser(newMovie).catch(console.dir);
+        addUser(newUser).catch(console.dir);
         
         console.log("Account Created");
-        res.render("nfLogin",{remainingAttempts:loginAttempts, response:"createdAccount"});
+        res.render("nfLogin",{response:"createdAccount"});
     }
 });
 
@@ -116,19 +127,19 @@ app.post('/delete', async (req,res) => {
 });
 
 app.post('/uploadMovie',async (req,res)=>{
-    var obj = {
+    var newMovie = {
         title:req.body.title,
         url:req.body.ID,
         genre:req.body.genre,
         description:req.body.description,
         views:0
     }
-    var previousEntry = await findMovie(obj.url);
+    var previousEntry = await findMovie(newMovie.url);
     if(!previousEntry){
-        addMovie(obj).catch(console.dir);
+        addMovie(newMovie).catch(console.dir);
     }else{
-        deleteMovie(await getMovieID(obj.url)).catch(console.dir);
-        addMovie(obj).catch(console.dir);
+        deleteMovie(await getMovieID(newMovie.url)).catch(console.dir);
+        addMovie(newMovie).catch(console.dir);
         req.session.movie = ""
     }
     console.log("Movie Uploaded")
@@ -137,7 +148,7 @@ app.post('/uploadMovie',async (req,res)=>{
 
 /////// website directories ///////
 app.get('/', (req, res) =>{
-    res.render('nfLogin',{remainingAttempts: loginAttempts,response: "start"});
+    res.render('nfLogin',{response: "defaultState"});
 });
 
 app.get('/watchPage/:url', async (req, res) => {
@@ -361,9 +372,6 @@ async function addView(id) {
     }
 }
 
-
-
-
 // storeMovies
 // takes nothing
 // returns array of urls
@@ -382,6 +390,117 @@ async function storeMovies() {
     } catch (error) {
         console.error("DB Error: ", error);
         throw error;
+    } finally {
+        await client.close();
+    }
+}
+
+// lockAccount
+// takes a username
+// returns nothing
+async function lockAccount(username) {
+    const client = new MongoClient(uri);
+    try {
+        await client.connect();
+
+        const db = client.db(databaseName);
+        const coll = db.collection(userColl);
+        
+        var lockTime = new Date();
+        lockTime.setHours(lockTime.getHours() + lockDurationHours);
+
+        const updateResult = await coll.updateOne({username: username},{ $set: {lock: lockTime}});
+        
+        if(updateResult.modifiedCount === 0){
+            console.log(`No user with username ${username}`);
+            return null;
+        }
+        
+        return;
+    } catch (error) {
+        console.error("Database error: ", error);
+    } finally {
+        await client.close();
+    }
+}
+
+// useAttempt
+// takes a username
+// returns loginAttempts 
+async function useAttempt(username) {
+    const client = new MongoClient(uri);
+    const projection = {_id: 0, email: 0, security: 0, accountType: 0};
+    try {
+        await client.connect();
+
+        const db = client.db(databaseName);
+        const coll = db.collection(userColl);
+
+        var newAttemptsTime = new Date();
+        newAttemptsTime.setMinutes(newAttemptsTime.getMinutes() + loginRefreshMin);
+        const updateResult = await coll.updateOne({username: username},{ $inc: {loginAttempts: -1}, $set:{loginRefresh:newAttemptsTime}});
+
+        if(updateResult.modifiedCount === 0){
+            return null;
+        }
+
+        const result = await coll.findOne({username:username}, projection);
+        return result.loginAttempts;
+    } catch (error) {
+        console.error("Database error: ", error);
+    } finally {
+        await client.close();
+    }
+}
+
+// refreshAttempts
+// takes a username
+// returns nothing
+async function refreshAttempts(username,forceRefresh = false) {
+    const client = new MongoClient(uri);
+    const projection = {_id: 0, email: 0, security: 0, accountType: 0};
+    try {
+        await client.connect();
+
+        const db = client.db(databaseName);
+        const coll = db.collection(userColl);
+
+        const result = await coll.findOne({username: username},projection);
+        if(!result){
+            console.log(`No user with username ${username}`);
+            return;
+        }
+        if(result.loginRefresh < new Date() || forceRefresh){
+            await coll.updateOne({username: username},{ $set: {loginAttempts: loginAttempts}});
+        }
+        return;
+    } catch (error) {
+        console.error("Database error: ", error);
+    } finally {
+        await client.close();
+    }
+}
+
+// checkLock
+// takes a username
+// returns lock if account exists
+async function checkLock(username) {
+    const client = new MongoClient(uri);
+    const projection = {_id: 0, email: 0, security: 0, accountType: 0};
+    try {
+        await client.connect();
+
+        const db = client.db(databaseName);
+        const coll = db.collection(userColl);
+
+        const result = await coll.findOne({username: username},projection);
+        if(!result){
+            console.log(`No user with username ${username}`);
+            return;
+        }
+        return result.lock;
+    } catch (error) {
+        console.error("Database error: ", error);
     } finally {
         await client.close();
     }
