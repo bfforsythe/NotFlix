@@ -77,7 +77,6 @@ app.post('/createUser', async (req,res)=>{
         email: req.body.email,
         question1: req.body.question1,
         question2: req.body.question2
-
     }
 
     if(currUser){
@@ -88,7 +87,6 @@ app.post('/createUser', async (req,res)=>{
         res.render('signup',{prefillData, response: "passwordUsername"});
     }else{
         var currTime = new Date()
-        currTime.toLocaleString('en', {timeZone:'America/New_York'});
         var newUser = {
             username: req.body.username,
             password: req.body.password,
@@ -153,7 +151,7 @@ app.get('/', (req, res) =>{
 
 app.get('/watchPage/:url', async (req, res) => {
     const user = req.session.user;
-    const url = req.params.url; // change title to url
+    const url = req.params.url;
     const vidData = await findMovie(url);
     addView(getMovieID(vidData.url));
     res.render('watchPage', { user, vidData });
@@ -218,7 +216,7 @@ async function addUser(userObj){
         const database = client.db(databaseName);
         const collection = database.collection(userColl);
 
-        const result = await collection.insertOne(userObj);
+        await collection.insertOne(userObj);
     } finally {
         await client.close();
     }
@@ -233,7 +231,7 @@ async function addMovie(movieObj){
         const database = client.db(databaseName);
         const collection = database.collection(movieColl);
 
-        const result = await collection.insertOne(movieObj);
+        await collection.insertOne(movieObj);
     } finally {
         await client.close();
     }
@@ -261,7 +259,7 @@ async function checkCredentials(username, password) {
 }
 
 // checkAvailability
-// takes a username and password
+// takes a username
 // returns a user object
 async function checkAvailability(username) {
     const client = new MongoClient(uri);
