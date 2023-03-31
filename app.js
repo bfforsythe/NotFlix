@@ -188,12 +188,16 @@ app.get('/uploadHelp', (req,res)=>{
 
 app.get('/browsingPage', async (req,res) =>{
     const user = req.session.user;
-    const [urlData] = await Promise.all([storeMovies(), ]);
+    const [urlData] = await Promise.all([storeMovies()]);
+
+     function getMovieGenre(movieGenre) {
+        return urlData.filter(movie => movie.genre === movieGenre).map(movie => movie.url)
+    }
 
     const newMovieGenres = {
-        Action: urlData.filter(movie => movie.genre === "Action").map(movie => movie.url),
-        Horror: urlData.filter(movie => movie.genre === "Horror").map(movie => movie.url),
-        Romance: urlData.filter(movie => movie.genre === "Romance").map(movie => movie.url)
+        Action: getMovieGenre("Action"),
+        Horror: getMovieGenre("Horror"),
+        Romance: getMovieGenre("Romance")
       };
 
     res.render("browsingPage", { user, newMovieGenres });
@@ -503,3 +507,6 @@ async function checkLock(username) {
         await client.close();
     }
 }
+
+//
+
