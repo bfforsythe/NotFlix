@@ -79,7 +79,7 @@ app.post('/createUser', async (req,res)=>{
     }else{
         var currTime = new Date()
         currTime.toLocaleString('en', {timeZone:'America/New_York'});
-        var obj = {
+        var newMovie = {
             username: req.body.username,
             password: req.body.password,
             email: req.body.email,
@@ -91,7 +91,7 @@ app.post('/createUser', async (req,res)=>{
             loginAttempts: 3,
             lock: currTime
         };
-        addUser(obj).catch(console.dir);
+        addUser(newMovie).catch(console.dir);
         
         console.log("Account Created");
         res.render("nfLogin",{remainingAttempts:loginAttempts, response:"createdAccount"});
@@ -201,13 +201,13 @@ app.use((req,res) =>{
 // addUser
 // takes a user object
 // returns nothing
-async function addUser(obj){
+async function addUser(userObj){
     const client = new MongoClient(uri);
     try{
         const database = client.db(databaseName);
         const collection = database.collection(userColl);
 
-        const result = await collection.insertOne(obj);
+        const result = await collection.insertOne(userObj);
     } finally {
         await client.close();
     }
@@ -216,13 +216,13 @@ async function addUser(obj){
 // addMovie
 // takes a movie object
 // returns nothing
-async function addMovie(obj){
+async function addMovie(movieObj){
     const client = new MongoClient(uri);
     try{
         const database = client.db(databaseName);
         const collection = database.collection(movieColl);
 
-        const result = await collection.insertOne(obj);
+        const result = await collection.insertOne(movieObj);
     } finally {
         await client.close();
     }
@@ -378,7 +378,6 @@ async function storeMovies() {
 
         const cursor = await coll.find({}, projection);
         const result = await cursor.toArray();
-        //console.log("------RESULT--------- ", result);
         return result;
     } catch (error) {
         console.error("DB Error: ", error);
