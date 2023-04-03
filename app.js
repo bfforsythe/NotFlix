@@ -58,7 +58,7 @@ app.post('/login', async (req, res) => {
     }
     if(!user){
         console.log("Login Failed");
-        res.render('nfLogin',{response: "loginFail"});
+        res.render('nfLogin',{attempts: remainingAttempts,response: "loginFail"});
         return;
     }
 
