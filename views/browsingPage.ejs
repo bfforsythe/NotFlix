@@ -22,139 +22,103 @@
     <%- include('./partials/nav.ejs') %>
     <%- include('./partials/userCheck.ejs') %>
 
-<!-- Begin Slideshow Containers
-            Brandon Forsythe, 2023
-      
-      All containers will initialize 100 empty spots to be filled by functions below
-      and will display 4 elements at a time, controlled by the arrows on each side of slides.
--->
-    
-    <div id="action-slides" class="slideshow-container">
-      <p1>Action</p1>
-        <% for (let i = 0; i < newMovieGenres.Action.length; i += maxMovies) { %>
-          <div class="slideshow-group">
-            <% for (let j = i; j < i + 100 && j < newMovieGenres.Action.length; j++) { %>
-                <div class="mySlides fade">
-                        <img height="<%= videoHeight %>px" width="<%= videoWidth %>px" src="https://i.ytimg.com/vi/<%= newMovieGenres.Action[j] %>/maxresdefault.jpg" onclick="storeURL('<%= newMovieGenres.Action[j] %>')">
-                    </div>  
-            <% } %>
-          
-        <% } %>
-        <a class="prev" onclick="plusSlides(-1, slideshow1)">❮</a>
-        <a class="next" onclick="plusSlides(1, slideshow1)">❯</a>
-      </div>
-    </div>
+<!-- 
+    Declare generic functions
+-->  
 
-      <!-- Horror Slides -->
+    <script>
 
-      
-      <div id="horror-slides" class="slideshow-container">
-        <p1> Horror </p1>
-        <% for (let i = 0; i < newMovieGenres.Horror.length; i += maxMovies) { %>
-          <div class="slideshow-group">
-            <% for (let j = i; j < i + 100 && j < newMovieGenres.Horror.length; j++) { %>
-                <div class="mySlides fade">
-                        <img height="<%= videoHeight %>px" width="<%= videoWidth %>px" src="https://i.ytimg.com/vi/<%= newMovieGenres.Horror[j] %>/maxresdefault.jpg" onclick="storeURL('<%= newMovieGenres.Horror[j] %>')">
-                    </div>  
-            <% } %>
-          
-        <% } %>
-        <a class="prev" onclick="plusSlides(-1,slideshow2)">❮</a>
-        <a class="next" onclick="plusSlides(1,slideshow2)">❯</a>
-        </div>
-      </div>
+      var slideshowArr = [];
 
-      <!-- Romance Slides -->
+      function showSlides(n, slideshow) {
+        slideshow.currentSlideIndex = n;
+        var i;
+        var slides = slideshow.getElementsByClassName("mySlides");
+        var startIndex = (n - 1) * 4;
+        var endIndex = startIndex + 4;
+        if (endIndex > slides.length) {
+          endIndex = slides.length;
+          startIndex = endIndex - 4;
+        }
+        for (i = 0; i < slides.length; i++) {
+          if (i >= startIndex && i < endIndex) {
+            slides[i].style.display = "block";
+          } else {
+            slides[i].style.display = "none";
+          }
+        }
+      }
 
-      
-      <div id="romance-slides" class="slideshow-container">
-        <p1> Romance </p1>
-        <% for (let i = 0; i < newMovieGenres.Romance.length; i += maxMovies) { %>
-          <div class="slideshow-group">
-            <% for (let j = i; j < i + 100 && j < newMovieGenres.Romance.length; j++) { %>
-                <div class="mySlides fade">
-                        <img height="<%= videoHeight %>px" width="<%= videoWidth %>px" src="https://i.ytimg.com/vi/<%= newMovieGenres.Romance[j] %>/maxresdefault.jpg" onclick="storeURL('<%= newMovieGenres.Romance[j] %>')">
-                    </div>  
-            <% } %>
-          
-        <% } %>
-        <center>
-        <a class="prev" onclick="plusSlides(-1,slideshow3)">❮</a>
-        <a class="next" onclick="plusSlides(1,slideshow3)">❯</a>
-      </center>
-        </div>
-      </div>
+      /* function storeURL
+      ------------------------------
+        this function takes the url chosen from the browsing page
+        and redirects the user to a watch page with the unique URL identifier
 
+      */
+      function storeURL(url) {
+          localStorage.setItem("retrievedURL", url);
+          console.log("URL STORED!", url);
+          const newUrl = `/watchPage/${url}`;
+          window.location.href = newUrl;
+      }
 
-</body>
-
-
-<script>
-
-/* function storeURL
- ------------------------------
-  this function takes the url chosen from the browsing page
-  and redirects the user to a watch page with the unique URL identifier
-
-*/
-function storeURL(url) {
-    localStorage.setItem("retrievedURL", url);
-    console.log("URL STORED!", url);
-    const newUrl = `/watchPage/${url}`;
-    window.location.href = newUrl;
-}
-
-// initialize slideshows
-
-var slideshow1 = document.getElementById("action-slides");
-  slideshow1.currentSlideIndex = 1;
-  showSlides(slideshow1.currentSlideIndex, slideshow1);
-  
-  var slideshow2 = document.getElementById("horror-slides");
-  slideshow2.currentSlideIndex = 1;
-  showSlides(slideshow2.currentSlideIndex, slideshow2);
-  
-  var slideshow3 = document.getElementById("romance-slides");
-  slideshow3.currentSlideIndex = 1;
-  showSlides(slideshow3.currentSlideIndex, slideshow3);
-  
-  
-  /*
-    function plusSlides
+       /*
+    function moveSlides
     --------------------
     this is the controller for the arrows.
     on click will move the slides that determined number of slides forward.
   
-  */
-  function plusSlides(n, slideshow) {
-    showSlides(slideshow.currentSlideIndex += n, slideshow);
-    console.log("MOVING SLIDES!!!!");
-  }
-  
-  function currentSlide(n, slideshow) {
-    showSlides(slideshow.currentSlideIndex = n, slideshow);
-  }
-  
-  
-  
-function showSlides(n, slideshow) {
-  slideshow.currentSlideIndex = n;
-  var i;
-  var slides = slideshow.getElementsByClassName("mySlides");
-  var startIndex = (n - 1) * 4;
-  var endIndex = startIndex + 4;
-  if (endIndex > slides.length) {
-    endIndex = slides.length;
-    startIndex = endIndex - 4;
-  }
-  for (i = 0; i < slides.length; i++) {
-    if (i >= startIndex && i < endIndex) {
-      slides[i].style.display = "block";
-    } else {
-      slides[i].style.display = "none";
+    */
+    function moveSlides(n, slideshow) {
+      showSlides(slideshow.currentSlideIndex += n, slideshow);
+      console.log("MOVING SLIDES!!!!");
     }
-  }
-}
+    
+    function currentSlide(n, slideshow) {
+      showSlides(slideshow.currentSlideIndex = n, slideshow);
+    }
+    </script>
 
+<!-- Begin Slideshow Containers
+            Brandon Forsythe, 2023
 
-</script>
+      All containers will initialize 100 empty spots to be filled by functions below
+      and will display 4 elements at a time, controlled by the arrows on each side of slides.
+--> 
+    <% var currIndex = 0; %>
+    <% for (const genre in newMovieGenres) {%>
+      <div id="<%= genre %>-slides">
+        <p><%= genre %></p>
+
+        <% for (i = 0; i < newMovieGenres[genre].length; i += maxMovies){%>
+        <div class="slideshow-group">
+          <% for (let j = i; j < i + 100 && j < newMovieGenres[genre].length; j++) { %>
+          <script>
+          </script>
+            <div class="mySlides fade">
+              <img height="<%= videoHeight %>px" width="<%= videoWidth %>px" src="https://i.ytimg.com/vi/<%= newMovieGenres[genre][j].url %>/maxresdefault.jpg" onclick="storeURL('<%= newMovieGenres[genre][j].url %>')">
+            </div>  
+          <% } %>
+        <a class="prev" onclick="moveSlides(-1, eval('slideshow' + '<%= currIndex%>'))">❮</a>
+        <a class="next" onclick="moveSlides(1, eval('slideshow' + '<%= currIndex%>'))">❯</a>
+        <br>
+        </div>
+      </div>
+        <% } %>
+
+      <script>
+        {
+        var currSlidesIndex = '<%= currIndex%>';
+        eval('var slideshow' + '<%= currIndex%>' + ' = document.getElementById("' + '<%= genre %>-slides' + '");');
+        slideshowArr.push(document.getElementById("<%= genre %>-slides"));
+        eval('var slideshow' + '<%= currIndex%>');
+        eval('<%= "slideshow" + currIndex %>' + '.currentSlideIndex = 1;');
+        showSlides(eval('<%= "slideshow" + currIndex %>' + '.currentSlideIndex'), eval('slideshow' + currSlidesIndex));
+        }
+      </script>
+      <% currIndex++ %>
+    <% } %>
+
+    
+</body>
+

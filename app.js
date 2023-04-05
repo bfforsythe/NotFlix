@@ -171,13 +171,14 @@ app.get('/browsingPage', async (req,res) =>{
     const [urlData] = await Promise.all([storeMovies()]);
 
      function getMovieGenre(movieGenre) {
-        return urlData.filter(movie => movie.genre === movieGenre).map(movie => movie.url)
+        return urlData.filter(movie => movie.genre === movieGenre).map(movie => movie)
     }
 
     const newMovieGenres = {
         Action: getMovieGenre("Action"),
         Horror: getMovieGenre("Horror"),
-        Romance: getMovieGenre("Romance")
+        Romance: getMovieGenre("Romance"),
+        Skill: getMovieGenre("Skill")
       };
 
     res.render("browsingPage", { user, newMovieGenres });
