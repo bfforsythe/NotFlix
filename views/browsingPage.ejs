@@ -25,6 +25,7 @@
     <center>
     <input type="text" id="search"> Search </input>
     <button type="submit" onclick="searchMovies()"> Search</button>
+    <button type="button" onclick="searchInput.value = ''";> Clear </button>
     </center>
 <!-- Begin Slideshow Containers
             Brandon Forsythe, 2023
@@ -177,16 +178,17 @@ function showSlides(n, slideshow) {
       }
 
       <% for(i = 0; i < urlData.length; i++){ %>
-
-        var searchTitles = "<%= urlData[i].title.toLowerCase()%>" ;
-
-        if("<%=urlData[i].title%>".includes(searchInput.value)){
-          console.log("FOUND!", "<%=urlData[i].title%>");
+        var searchTitles = "<%= urlData[i].title%>".toLowerCase() ;
+        if(searchTitles.includes(searchInput.value) || "<%=urlData[i].title%>".includes(searchInput.value)){
+          console.log("FOUND!", searchTitles);
           const searchResult = document.createElement('img');
-          searchResult.height = 200;
-          searchResult.width = 300;
+          searchResult.height = <%= videoHeight%>;
+          searchResult.width = <%= videoWidth%>;
           var resultString = "https://i.ytimg.com/vi/" + "<%=urlData[i].url%>" + "/maxresdefault.jpg";
           searchResult.src=resultString;
+          searchResult.addEventListener('click', function() {
+          storeURL('<%= urlData[i].url %>');
+          });
 
           searchResultsContainer.appendChild(searchResult);
         }
