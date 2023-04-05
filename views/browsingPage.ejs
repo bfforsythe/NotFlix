@@ -22,6 +22,10 @@
     <%- include('./partials/nav.ejs') %>
     <%- include('./partials/userCheck.ejs') %>
 
+    <center>
+    <input type="text" id="search"> Search </input>
+    <button type="submit" onclick="searchMovies()"> Search</button>
+    </center>
 <!-- Begin Slideshow Containers
             Brandon Forsythe, 2023
       
@@ -29,6 +33,8 @@
       and will display 4 elements at a time, controlled by the arrows on each side of slides.
 -->
     
+  <div id="search-results"></div>
+
     <div id="action-slides" class="slideshow-container">
       <p1>Action</p1>
         <% for (let i = 0; i < newMovieGenres.Action.length; i += maxMovies) { %>
@@ -155,6 +161,42 @@ function showSlides(n, slideshow) {
     }
   }
 }
+
+  var searchInput = document.getElementById("search");
+  function searchMovies() {
+
+    var slideshowContainers = document.getElementsByClassName("slideshow-container");
+    const searchResultsContainer = document.getElementById('search-results');
+    while (searchResultsContainer.firstChild) {
+      searchResultsContainer.removeChild(searchResultsContainer.firstChild);
+    }
+
+    if (searchInput.value !== "") {
+      for (var i = 0; i < slideshowContainers.length; i++) {
+        slideshowContainers[i].style.display = "none";
+      }
+
+      <% for(i = 0; i < urlData.length; i++){ %>
+
+        var searchTitles = "<%= urlData[i].title.toLowerCase()%>" ;
+
+        if("<%=urlData[i].title%>".includes(searchInput.value)){
+          console.log("FOUND!", "<%=urlData[i].title%>");
+          const searchResult = document.createElement('img');
+          searchResult.height = 200;
+          searchResult.width = 300;
+          var resultString = "https://i.ytimg.com/vi/" + "<%=urlData[i].url%>" + "/maxresdefault.jpg";
+          searchResult.src=resultString;
+
+          searchResultsContainer.appendChild(searchResult);
+        }
+     <% } %>
+    } else {
+      for (var i = 0; i < slideshowContainers.length; i++) {
+        slideshowContainers[i].style.display = "block";
+      }
+    }
+  }
 
 
 </script>
