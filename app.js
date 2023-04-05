@@ -75,7 +75,7 @@ app.post('/createUser', async (req,res)=>{
     if(currUser){
         console.log("username taken");
         res.render('signup',{prefillData, response: "usernameTaken"});
-    }else if(req.body.password.includes(req.body.username)){
+    }else if(req.body.password.toLowerCase().includes(req.body.username.toLowerCase())){
         console.log("Password cannot contain username");
         res.render('signup',{prefillData, response: "passwordUsername"});
     }else{
