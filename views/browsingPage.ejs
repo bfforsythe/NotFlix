@@ -163,8 +163,12 @@ function showSlides(n, slideshow) {
   }
 }
 
-  var searchInput = document.getElementById("search");
+var searchInput = document.getElementById("search");
+
   function searchMovies() {
+    
+   
+    var regex = new RegExp("\\b" + searchInput.value + "\\w*\\b", "i");
 
     var slideshowContainers = document.getElementsByClassName("slideshow-container");
     const searchResultsContainer = document.getElementById('search-results');
@@ -179,7 +183,7 @@ function showSlides(n, slideshow) {
 
       <% for(i = 0; i < urlData.length; i++){ %>
         var searchTitles = "<%= urlData[i].title%>".toLowerCase() ;
-        if(searchTitles.includes(searchInput.value) || "<%=urlData[i].title%>".includes(searchInput.value)){
+        if(regex.test(searchTitles) || regex.test("<%=urlData[i].title%>")){
           const searchResult = document.createElement('img');
           searchResult.height = <%= videoHeight%>;
           searchResult.width = <%= videoWidth%>;
