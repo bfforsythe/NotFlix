@@ -74,19 +74,19 @@ var searchInput = document.getElementById("search");
         slideshowContainers[i].style.display = "none";
       }
 
-      <% for(i = 0; i < urlData.length; i++){ %>
+      '<% for(i = 0; i < urlData.length; i++){ %>'
         var searchTitles = "<%= urlData[i].title%>".toLowerCase() ;
         if(regex.test(searchTitles) || regex.test("<%=urlData[i].title%>")){
           const searchResult = document.createElement('img');
-          searchResult.height = <%= videoHeight%>;
-          searchResult.width = <%= videoWidth%>;
+          searchResult.height = '<%= videoHeight%>';
+          searchResult.width = '<%= videoWidth%>';
           var resultString = "https://i.ytimg.com/vi/" + "<%=urlData[i].url%>" + "/maxresdefault.jpg";
           searchResult.src=resultString;
           searchResult.addEventListener('click', function() {
           storeURL('<%= urlData[i].url %>');          });
           searchResultsContainer.appendChild(searchResult);
         }
-     <% } %>
+     '<% } %>'
     } else {
       for (var i = 0; i < slideshowContainers.length; i++) {
         slideshowContainers[i].style.display = "block"; }}};
