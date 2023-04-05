@@ -98,6 +98,8 @@ input.showPassButton{
     <p id="number" class="invalid">A <b>number</b></p>
     <p id="specialChar" class="invalid"><b> A special character</b></p>
     <p id="length" class="invalid">Minimum <b>10 characters</b></p>
+    <h3>Password must not contain the following:</h3>
+    <p id="whitespace" class="invalid"><b>Spaces</b></p>
   </div>
 
     <!-- Create username req box, set to appear wehen clicked--> 
@@ -109,6 +111,8 @@ input.showPassButton{
     <p id="usernumber" class="invalid">A <b>number</b></p>
     <p id="userspecialChar" class="invalid"><b> A special character</b></p>
     <p id="userlength" class="invalid">Minimum <b>8 characters</b></p> 
+    <h3>Username must not contain the following:</h3>
+    <p id="userWhitespace" class="invalid"><b>Spaces</b></p>
   </div>
 
 </div>
@@ -141,17 +145,20 @@ input.showPassButton{
     var number = document.getElementById("number");
     var length = document.getElementById("length");
     var specialChar = document.getElementById("specialChar");
+    var whitespace = document.getElementById("whitespace");
 
     var userInput = document.getElementById("username");
     var usercapital = document.getElementById("usercapital");
     var usernumber = document.getElementById("usernumber");
     var userlength = document.getElementById("userlength");
     var userspecialChar = document.getElementById("userspecialChar");
+    var userWhitespace = document.getElementById("userWhitespace");
 
     var numbers = /[0-9]/g;
     var specialChars =/["@","$","!","%","?","&"]/
     var lowerCaseLetters = /[a-z]/g;
     var upperCaseLetters = /[A-Z]/g;
+    var whitespaceChars = /\s/g;
 
 // Begin Username Requirements
 
@@ -181,8 +188,17 @@ input.showPassButton{
       usernumber.classList.remove("invalid");
       usernumber.classList.add("valid");
     } else{
-     usernumber.classList.remove("valid");
-     usernumber.classList.add("invalid");
+      usernumber.classList.remove("valid");
+      usernumber.classList.add("invalid");
+    }
+  // -----------------------------------------------
+  
+    if(!userInput.value.match(whitespaceChars)){
+      userWhitespace.classList.remove("invalid");
+      userWhitespace.classList.add("valid");
+    } else{
+      userWhitespace.classList.remove("valid");
+      userWhitespace.classList.add("invalid");
     }
   // -----------------------------------------------
     if(userInput.value.length >= 8){
@@ -239,6 +255,16 @@ input.showPassButton{
       } else{
         capital.classList.remove("valid");
         capital.classList.add("invalid");
+      }
+// --------------------------------------------------
+
+
+      if(!myInput.value.match(whitespaceChars)){
+        whitespace.classList.remove("invalid");
+        whitespace.classList.add("valid");
+      } else{
+        whitespace.classList.remove("valid");
+        whitespace.classList.add("invalid");
       }
 // --------------------------------------------------
 
