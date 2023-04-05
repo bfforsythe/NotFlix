@@ -180,25 +180,20 @@ function showSlides(n, slideshow) {
       <% for(i = 0; i < urlData.length; i++){ %>
         var searchTitles = "<%= urlData[i].title%>".toLowerCase() ;
         if(searchTitles.includes(searchInput.value) || "<%=urlData[i].title%>".includes(searchInput.value)){
-          console.log("FOUND!", searchTitles);
           const searchResult = document.createElement('img');
           searchResult.height = <%= videoHeight%>;
           searchResult.width = <%= videoWidth%>;
           var resultString = "https://i.ytimg.com/vi/" + "<%=urlData[i].url%>" + "/maxresdefault.jpg";
           searchResult.src=resultString;
           searchResult.addEventListener('click', function() {
-          storeURL('<%= urlData[i].url %>');
-          });
-
+          storeURL('<%= urlData[i].url %>');          });
           searchResultsContainer.appendChild(searchResult);
         }
      <% } %>
     } else {
       for (var i = 0; i < slideshowContainers.length; i++) {
-        slideshowContainers[i].style.display = "block";
-      }
-    }
-  }
+        slideshowContainers[i].style.display = "block"; }}};
+  
 
 
 </script>
