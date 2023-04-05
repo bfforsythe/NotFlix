@@ -163,13 +163,16 @@ function showSlides(n, slideshow) {
   }
 }
 
+// function searchMovies()
+// -----------------------
+// given the title of a "movie" (case insensitve, of any substring)
+// returns the entry, clickable to watch the video.
+// to retrieve the carousels, clear the box and search again.
+
 var searchInput = document.getElementById("search");
 
   function searchMovies() {
-    
-   
-    var regex = new RegExp("\\b" + searchInput.value + "\\w*\\b", "i");
-
+    var regex = new RegExp("\\b" + searchInput.value + "\\w*\\b", "i"); // regex (boundary + search input + anyword, boundary, case insensitive)
     var slideshowContainers = document.getElementsByClassName("slideshow-container");
     const searchResultsContainer = document.getElementById('search-results');
     while (searchResultsContainer.firstChild) {
