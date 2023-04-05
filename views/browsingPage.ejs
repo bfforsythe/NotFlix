@@ -130,7 +130,7 @@ var searchInput = document.getElementById("search");
 --> 
     <% var currIndex = 0; %>
     <% for (const genre in newMovieGenres) {%>
-      <div id="<%= genre %>-slides">
+      <div id="<%= genre %>-slides" class="slideshow-container">
         <p><%= genre %></p>
 
         <% for (i = 0; i < newMovieGenres[genre].length; i += maxMovies){%>
