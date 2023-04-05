@@ -246,7 +246,7 @@ async function addUser(userObj){
 }
 
 // addMovie
-// takes a movie object
+// takes a movie object (different database collection)
 // returns nothing
 async function addMovie(movieObj){
     const client = new MongoClient(uri);
