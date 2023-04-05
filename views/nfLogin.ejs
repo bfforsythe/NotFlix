@@ -26,7 +26,12 @@
         <% } %>
         <% if(response == "loginFail"){%>
             <script>
-                alert("Username or password is incorrect.");
+                var message = "Username or password is incorrect.\n";
+                if(typeof <%= attempts %> != "undefined"){
+                    message += <%= attempts %>;
+                    message += " attempts remaining\n";
+                }
+                alert(message);
             </script>
         <% } %>
         <% if(response == "passwordUsername"){%>
@@ -35,7 +40,7 @@
             </script>
         <% } %>
 
-        <div class="wrapper">
+        <div class="hcSquare">
             <div class="titleRectangle">
                 <h1> NotFlix Login</h1>
             </div>

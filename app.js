@@ -58,7 +58,7 @@ app.post('/login', async (req, res) => {
     }
     if(!user){
         console.log("Login Failed");
-        res.render('nfLogin',{response: "loginFail"});
+        res.render('nfLogin',{attempts: remainingAttempts,response: "loginFail"});
         return;
     }
 
@@ -70,36 +70,16 @@ app.post('/login', async (req, res) => {
 
 app.post('/createUser', async (req,res)=>{
     const currUser = await checkAvailability(req.body.username);
-    prefillData = {
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        username: req.body.username,
-        email: req.body.email,
-        question1: req.body.question1,
-        question2: req.body.question2
-    }
+    var prefillData = getPrefillSignup(req.body);
 
     if(currUser){
         console.log("username taken");
         res.render('signup',{prefillData, response: "usernameTaken"});
-    }else if(req.body.password.includes(req.body.username)){
+    }else if(req.body.password.toLowerCase().includes(req.body.username.toLowerCase())){
         console.log("Password cannot contain username");
         res.render('signup',{prefillData, response: "passwordUsername"});
     }else{
-        var currTime = new Date()
-        var newUser = {
-            username: req.body.username,
-            password: req.body.password,
-            email: req.body.email,
-            security: {
-                "Mothers maiden name": req.body.question1,
-                "City of birth": req.body.question2
-            },
-            accountType: "user",
-            loginAttempts: 3,
-            loginRefresh: currTime,
-            lock: currTime
-        };
+        var newUser = makeNewUser(req.body);
         addUser(newUser).catch(console.dir);
         
         console.log("Account Created");
@@ -127,7 +107,7 @@ app.post('/delete', async (req,res) => {
 app.post('/uploadMovie',async (req,res)=>{
     var newMovie = {
         title:req.body.title,
-        url:req.body.ID,
+        url:req.body.url,
         genre:req.body.genre,
         description:req.body.description,
         views:0
@@ -158,7 +138,7 @@ app.get('/watchPage/:url', async (req, res) => {
 });
 
 app.get('/signup', (req, res) =>{
-    prefillData = {
+    var prefillData = {
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         username: req.body.username,
@@ -208,6 +188,45 @@ app.use((req,res) =>{
     res.status(404).render('404');
 });
 
+/////// helper functions ///////
+
+// getPrefillSignup
+// gets prefill data for signup page
+// takes req.body
+// returns object with prefill data
+function getPrefillSignup(body){
+    var prefillData = {
+        firstName: body.firstName,
+        lastName: body.lastName,
+        username: body.username,
+        email: body.email,
+        question1: body.question1,
+        question2: body.question2
+    };
+    return prefillData;
+}
+
+// makeNewUser
+// creates a new User object
+// takes req.body
+// returns object with user data from signup Page
+function makeNewUser(body){
+    var currTime = new Date()
+    var newUser = {
+        username: body.username,
+        password: body.password,
+        email: body.email,
+        security: {
+            "Mothers maiden name": body.question1,
+            "City of birth": body.question2
+        },
+        accountType: "user",
+        loginAttempts: 3,
+        loginRefresh: currTime,
+        lock: currTime
+    };
+    return newUser;
+}
 
 /////// MongoDb related functions ///////
 
