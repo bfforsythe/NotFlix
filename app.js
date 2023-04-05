@@ -180,8 +180,7 @@ app.get('/browsingPage', async (req,res) =>{
         Romance: getMovieGenre("Romance"),
         Skill: getMovieGenre("Skill")
       };
-
-    res.render("browsingPage", { user, newMovieGenres });
+    res.render("browsingPage", { user, newMovieGenres, urlData });
 });
 
 // 404 page
@@ -399,7 +398,7 @@ async function addView(id) {
 // returns array of urls
 async function storeMovies() {
     const client = new MongoClient(uri);
-    const projection = {_id:0, url:1, genre:1, description:0, views:0};
+    const projection = {_id:0, url:1, genre:1, description:0, views:0, title:1};
 
     try {
         await client.connect();
