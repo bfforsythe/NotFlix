@@ -159,16 +159,21 @@ var searchInput = document.getElementById("search");
         showSlides(eval('<%= "slideshow" + currIndex %>' + '.currentSlideIndex'), eval('slideshow' + currSlidesIndex));
         }
 
+// function filterSlides
+// ----------------------
+// using the value of the dropdown above,
+// hide all other slides aside from the one wanted
+
         function fliterSlides(genreName) {
-    var filterResult = document.getElementById(genreName + "-slides");
-    var slideshowContainers = document.getElementsByClassName("slideshow-container");
-    for (let i = 0; i < slideshowContainers.length; i++) {
-      if (slideshowContainers[i] !== filterResult) {
-        slideshowContainers[i].style.display = "none";
+        var filterResult = document.getElementById(genreName + "-slides");
+        var slideshowContainers = document.getElementsByClassName("slideshow-container");
+        for (let i = 0; i < slideshowContainers.length; i++) {
+          if (slideshowContainers[i] !== filterResult) {
+            slideshowContainers[i].style.display = "none";
+          }
+        }
+        filterResult.style.display = "block";
       }
-    }
-    filterResult.style.display = "block";
-  }
       </script>
 
       <% currIndex++ %>
