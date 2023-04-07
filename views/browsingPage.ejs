@@ -16,16 +16,15 @@
     <% let maxMovies = 100 %>
     <% let videoWidth = 200 %>
     <% let videoHeight = 100 %>
-    <%- include('./partials/nav.ejs') %>
-    <%- include('./partials/userCheck.ejs') %>
-
-    <center>
-    <input type="text" id="search"></input>
-    <button type="submit" onclick="searchMovies()"> Search</button>
-    <button type="submit" onclick="searchInput.value = ''; searchMovies()"> Clear </button>
-    </center>
-    
-  <div id="search-results"></div>
+    <div class="center" style="max-width: 1000">
+      <%- include('./partials/nav.ejs') %>
+      <%- include('./partials/userCheck.ejs') %>
+      <center>
+      <input type="text" id="search"></input>
+      <button type="submit" onclick="searchMovies()"> Search</button>
+      <button type="submit" onclick="searchInput.value = ''; searchMovies()"> Clear </button>
+      </center>
+    <div id="search-results"></div>
 
     <script>
 
@@ -125,6 +124,7 @@ var searchInput = document.getElementById("search");
       All containers will initialize 100 empty spots to be filled by functions below
       and will display 4 elements at a time, controlled by the arrows on each side of slides.
 --> 
+  <div>
     <% var currIndex = 0; %>
     <% for (const genre in newMovieGenres) {%>
       <div id="<%= genre %>-slides" class="slideshow-container">
@@ -159,7 +159,7 @@ var searchInput = document.getElementById("search");
 
       <% currIndex++ %>
     <% } %>
-
-    
+  </div>
+</div>
 </body>
 
