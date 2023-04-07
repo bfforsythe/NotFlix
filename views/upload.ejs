@@ -8,8 +8,8 @@
 <body>
     <div class="wrapper">
         <%- include('./partials/nav.ejs') %>
-    <form action="/uploadMovie" method="post" id="movieForm">
         <div class="hcSquare">
+    <form action="/uploadMovie" method="post" id="movieForm">
             <% if(movie){ %>
             <% var title = movie.title; %>
             <% var url = movie.url; %>
@@ -49,8 +49,13 @@
             <nav>
                 <a href="/uploadHelp">Upload Help</a>
             </nav>
-        </div>
     </form>
+    <form action="/addGenre" method="post" id="genreForm">
+        <label>Add New Genre:</label>
+        <input type="text" placeholder="New Genre" id="newGenre" name="newGenre">
+        <button type="submit">Add</button>
+    </form>
+    </div>
     </div>
 
 </body>

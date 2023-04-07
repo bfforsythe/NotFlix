@@ -8,7 +8,7 @@ const session = require('express-session');
 const databaseName = "Notflix";
 const userColl = "fortnite";
 const movieColl = "movies";
-const genres = ["Action","Horror","Romance"];
+//const genres = ["Action","Horror","Romance"];
 const PORT = 5000;
 const loginAttempts = 3;
 const loginRefreshMin = 60;
@@ -135,6 +135,17 @@ app.post('/uploadMovie',async (req,res)=>{
     res.redirect('/browsingPage');
 });
 
+app.post('/addGenre',async (req,res)=>{
+    addGenre(genreFormat(req.body.newGenre));
+    res.redirect('/upload');
+});
+
+// helper functions //
+function genreFormat(str){
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+}
+
+
 /////// website directories ///////
 app.get('/', (req, res) =>{
     res.render('nfLogin',{response: "defaultState"});
@@ -165,8 +176,9 @@ app.get('/sign-up',(req,res) =>{
     res.redirect('signup');
 });
 
-app.get('/upload', (req,res)=>{
+app.get('/upload', async (req,res)=>{
     const user = req.session.user;
+    var genres = await getGenres();
     movie = req.session.movie
     req.session.movie = 'undefined';
     res.render("upload",{user, genres, movie})
@@ -184,13 +196,12 @@ app.get('/browsingPage', async (req,res) =>{
      function getMovieGenre(movieGenre) {
         return urlData.filter(movie => movie.genre === movieGenre).map(movie => movie)
     }
+    const genres = await getGenres();
+    const newMovieGenres = {};
 
-    const newMovieGenres = {
-        Action: getMovieGenre("Action"),
-        Horror: getMovieGenre("Horror"),
-        Romance: getMovieGenre("Romance"),
-        Skill: getMovieGenre("Skill")
-      };
+    for(var i = 0; i < genres.length; i++){
+        newMovieGenres[genres[i]] = getMovieGenre(genres[i]);
+    }
     res.render("browsingPage", { user, newMovieGenres, urlData });
 });
 
@@ -396,4 +407,25 @@ async function checkLock(username) {
         return;
     }
     return result.lock;
+}
+
+
+// getGenres
+// takes nothing
+// returns genre array from genreList mongodb object
+async function getGenres(){
+    const result = await db.collection(movieColl).findOne({name:"genreList"});
+    if(result){
+        return result.genres;
+    }
+    return null;
+}
+
+// addGenre
+// takes a genre name string
+// adds genre name string to genreList object in mongodb
+// returns nothing
+async function addGenre(genreName){
+    await db.collection(movieColl).updateOne({name:"genreList"},{$push:{genres:genreName}},{upsert:true});
+    return; 
 }
