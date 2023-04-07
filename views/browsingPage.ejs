@@ -126,17 +126,17 @@ var searchInput = document.getElementById("search");
 --> 
   <div>
     <% var currIndex = 0; %>
-    <% for (const genre in newMovieGenres) {%>
+    <% for (const genre in genres) {%>
       <div id="<%= genre %>-slides" class="slideshow-container">
         <p><%= genre %></p>
 
-        <% for (i = 0; i < newMovieGenres[genre].length; i += maxMovies){%>
+        <% for (i = 0; i < genres[genre].length; i += maxMovies){%>
         <div class="slideshow-group">
-          <% for (let j = i; j < i + 100 && j < newMovieGenres[genre].length; j++) { %>
+          <% for (let j = i; j < i + 100 && j < genres[genre].length; j++) { %>
           <script>
           </script>
             <div class="mySlides fade">
-              <img height="<%= videoHeight %>px" width="<%= videoWidth %>px" src="https://i.ytimg.com/vi/<%= newMovieGenres[genre][j].url %>/maxresdefault.jpg" onclick="storeURL('<%= newMovieGenres[genre][j].url %>')">
+              <img height="<%= videoHeight %>px" width="<%= videoWidth %>px" src="https://i.ytimg.com/vi/<%= genres[genre][j].url %>/maxresdefault.jpg" onclick="storeURL('<%= genres[genre][j].url %>')">
             </div>  
           <% } %>
         <a class="prev" onclick="moveSlides(-1, eval('slideshow' + '<%= currIndex%>'))">❮</a>

@@ -196,13 +196,13 @@ app.get('/browsingPage', async (req,res) =>{
      function getMovieGenre(movieGenre) {
         return urlData.filter(movie => movie.genre === movieGenre).map(movie => movie)
     }
-    const genres = await getGenres();
-    const newMovieGenres = {};
+    const genreArray = await getGenres();
+    const genres = {};
 
-    for(var i = 0; i < genres.length; i++){
-        newMovieGenres[genres[i]] = getMovieGenre(genres[i]);
+    for(var i = 0; i < genreArray.length; i++){
+        genres[genreArray[i]] = getMovieGenre(genreArray[i]);
     }
-    res.render("browsingPage", { user, newMovieGenres, urlData });
+    res.render("browsingPage", { user, genres, urlData });
 });
 
 function getGenres(){
