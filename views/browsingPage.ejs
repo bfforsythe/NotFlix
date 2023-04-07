@@ -1,19 +1,16 @@
 <!-- Loop a function that adds continuous images based on how many urls they are
      the urls function as hyperlinks to an image, on click redirect to watchPage, easy. -->
+      <%- include('./partials/head.ejs') %>
+      <%- include('./partials/carousel.ejs') %>
 <style>
     Body {
         background: rgb(45,160,184);
         background: linear-gradient( rgba(45,160,184,1) 2%, rgba(2,0,36,0.7792366946778712) 16%, rgba(9,115,121,1) 92%);
         }
-        .slideshow-group {
-        display: flex;
-        justify-content: center;
-        }
 </style>
 <head>
     <title>Browsing Page</title>
 </head>
-<%- include('./partials/carousel.ejs') %>
 
 <body>
     <% let maxMovies = 100 %>

@@ -29,8 +29,19 @@ app.use(session({
     saveUninitialized: false
 }));
 
+// signal handlers
+
+process.on('SIGINT', async function(){
+    console.log("Closing Server");
+    await client.close();
+    process.exit(0);
+});
+
 // setup MongoDb
 const uri = "mongodb://127.0.0.1:27017";
+const client = new MongoClient(uri);
+client.connect();
+const db = client.db(databaseName);
 
 // set website port
 app.listen(PORT);
@@ -183,6 +194,10 @@ app.get('/browsingPage', async (req,res) =>{
     res.render("browsingPage", { user, newMovieGenres, urlData });
 });
 
+function getGenres(){
+
+}
+
 // 404 page
 app.use((req,res) =>{
     res.status(404).render('404');
@@ -234,298 +249,151 @@ function makeNewUser(body){
 // takes a user object
 // returns nothing
 async function addUser(userObj){
-    const client = new MongoClient(uri);
-    try{
-        const database = client.db(databaseName);
-        const collection = database.collection(userColl);
-
-        await collection.insertOne(userObj);
-    } finally {
-        await client.close();
-    }
+    await db.collection(userColl).insertOne(userObj);
 }
 
 // addMovie
 // takes a movie object (different database collection)
 // returns nothing
 async function addMovie(movieObj){
-    const client = new MongoClient(uri);
-    try{
-        const database = client.db(databaseName);
-        const collection = database.collection(movieColl);
-
-        await collection.insertOne(movieObj);
-    } finally {
-        await client.close();
-    }
+    await db.collection(movieColl).insertOne(movieObj);
 }
 
 // checkCredentials
 // takes a username and password
 // returns a user object
 async function checkCredentials(username, password) {
-    const client = new MongoClient(uri);
     const projection = {_id: 0, email: 0, security: 0, accountType: 0};
-    try {
-        await client.connect();
-
-        const db = client.db(databaseName);
-        const coll = db.collection(userColl);
-        
-        const result = await coll.findOne({username:username, password:password}, projection);
-        return result;
-    } catch (error) {
-        console.error("Database error: ", error);
-    } finally {
-        await client.close();
-    }
+    const result = await db.collection(userColl).findOne({username:username, password:password}, projection);
+    return result;
 }
 
 // checkAvailability
 // takes a username
 // returns a user object
 async function checkAvailability(username) {
-    const client = new MongoClient(uri);
     const projection = {_id: 0, email: 0, security: 0, accountType: 0, password: 0};
-    try {
-        await client.connect();
-
-        const db = client.db(databaseName);
-        const coll = db.collection(userColl);
         
-        var regstr = "";
-        for( var i = 0; i < username.length; i++){
-            if (username.charAt(i) == '$'){
-                regstr += "\\$";
-            }else{
-                regstr += username.charAt(i);
-            }
+    var regstr = "";
+    for( var i = 0; i < username.length; i++){
+        if (username.charAt(i) == '$'){
+            regstr += "\\$";
+        }else{
+            regstr += username.charAt(i);
         }
-        const result = await coll.findOne({username: {$regex: new RegExp('^' + regstr + '$', 'i')}}, projection);
-        return result;
-    } catch (error) {
-        console.error("Database error: ", error);
-    } finally {
-        await client.close();
     }
+    const result = await db.collection(userColl).findOne({username: {$regex: new RegExp('^' + regstr + '$', 'i')}}, projection);
+    return result;
 }
   
 // findMovie
 // takes a title string
 // returns a movie object
 async function findMovie(url) {
-    const client = new MongoClient(uri);
     const projection = { _id: 0, url: 1, title: 0, genre: 0, description: 0, views: 0 };
-    try {
-        await client.connect();
-        const db = client.db(databaseName);
-        const coll = db.collection(movieColl);
-        const result = await coll.findOne({ url: url }, projection);
-        return result;
-    } catch (error) {
-        console.error("Database error: ", error);
-    } finally {
-        await client.close();
-    }
+    const result = await db.collection(movieColl).findOne({ url: url }, projection);
+    return result;
 }
 
 // getMovieID
 // takes a title string
 // returns _ID from movie object
 async function getMovieID(url) {
-    const client = new MongoClient(uri);
     const projection = {_id: 0, url: 1, title:0, genre: 0, description: 0, views:0};
-    try {
-        await client.connect();
-
-        const db = client.db(databaseName);
-        const coll = db.collection(movieColl);
-  
-        const result = await coll.findOne({url:url}, projection);
-        return result._id;
-    } catch (error) {
-        console.error("Database error: ", error);
-    } finally {
-        await client.close();
-    }
+    const result = await db.collection(movieColl).findOne({url:url}, projection);
+    return result._id;
 }
   
 // deleteMovie
 // takes _ID of movie
 // returns nothing
 async function deleteMovie(id) {
-    const client = new MongoClient(uri);
     const projection = {title: 0, url: 0, genre: 0, description: 0, views:0};
-    try {
-        await client.connect();
-
-        const db = client.db(databaseName);
-        const coll = db.collection(movieColl);
-  
-        await coll.deleteOne({_id:await id}, projection);
-        return;
-    } catch (error) {
-        console.error("Database error: ", error);
-    } finally {
-        await client.close();
-    }
+    await db.collection(movieColl).deleteOne({_id:await id}, projection);
+    return;
 }
   
 // addView
 // takes _ID of movie
 // returns nothing
 async function addView(id) {
-    const client = new MongoClient(uri);
     const projection = {title: 0, url: 0, genre: 0, description: 0, views:0};
-    try {
-        await client.connect();
-
-        const db = client.db(databaseName);
-        const coll = db.collection(movieColl);
-        
-        const result = await coll.findOne({_id:await id}, projection);
-        await coll.updateOne({ _id:await id },{ $set: { views:result.views+1 } })
-        return;
-    } catch (error) {
-        console.error("Database error: ", error);
-    } finally {
-        await client.close();
-    }
+    const result = await db.collection(movieColl).findOne({_id:await id}, projection);
+    await db.collection(movieColl).updateOne({ _id:await id },{ $set: { views:result.views+1 } })
+    return;
 }
 
 // storeMovies
 // takes nothing
 // returns array of urls
 async function storeMovies() {
-    const client = new MongoClient(uri);
     const projection = {_id:0, url:1, genre:1, description:0, views:0, title:1};
-
-    try {
-        await client.connect();
-        const db = client.db(databaseName);
-        const coll = db.collection(movieColl);
-
-        const cursor = await coll.find({}, projection);
-        const result = await cursor.toArray();
-        return result;
-    } catch (error) {
-        console.error("DB Error: ", error);
-        throw error;
-    } finally {
-        await client.close();
-    }
+    const cursor = await db.collection(movieColl).find({}, projection);
+    const result = await cursor.toArray();
+    return result;
 }
 
 // lockAccount
 // takes a username
 // returns nothing
 async function lockAccount(username) {
-    const client = new MongoClient(uri);
-    try {
-        await client.connect();
+    var lockTime = new Date();
+    lockTime.setHours(lockTime.getHours() + lockDurationHours);
 
-        const db = client.db(databaseName);
-        const coll = db.collection(userColl);
+    const updateResult = await db.collection(userColl).updateOne({username: username},{ $set: {lock: lockTime}});
         
-        var lockTime = new Date();
-        lockTime.setHours(lockTime.getHours() + lockDurationHours);
-
-        const updateResult = await coll.updateOne({username: username},{ $set: {lock: lockTime}});
-        
-        if(updateResult.modifiedCount === 0){
-            console.log(`No user with username ${username}`);
-            return null;
-        }
-        
-        return;
-    } catch (error) {
-        console.error("Database error: ", error);
-    } finally {
-        await client.close();
+    if(updateResult.modifiedCount === 0){
+        console.log(`No user with username ${username}`);
+        return null;
     }
+        
+    return;
 }
 
 // useAttempt
 // takes a username
 // returns loginAttempts 
 async function useAttempt(username) {
-    const client = new MongoClient(uri);
     const projection = {_id: 0, email: 0, security: 0, accountType: 0};
-    try {
-        await client.connect();
+    var newAttemptsTime = new Date();
+    newAttemptsTime.setMinutes(newAttemptsTime.getMinutes() + loginRefreshMin);
+    const updateResult = await db.collection(userColl).updateOne({username: username},{ $inc: {loginAttempts: -1}, $set:{loginRefresh:newAttemptsTime}});
 
-        const db = client.db(databaseName);
-        const coll = db.collection(userColl);
-
-        var newAttemptsTime = new Date();
-        newAttemptsTime.setMinutes(newAttemptsTime.getMinutes() + loginRefreshMin);
-        const updateResult = await coll.updateOne({username: username},{ $inc: {loginAttempts: -1}, $set:{loginRefresh:newAttemptsTime}});
-
-        if(updateResult.modifiedCount === 0){
-            return null;
-        }
-
-        const result = await coll.findOne({username:username}, projection);
-        return result.loginAttempts;
-    } catch (error) {
-        console.error("Database error: ", error);
-    } finally {
-        await client.close();
+    if(updateResult.modifiedCount === 0){
+        return null;
     }
+
+    const result = await db.collection(userColl).findOne({username:username}, projection);
+    return result.loginAttempts;
 }
 
 // refreshAttempts
 // takes a username
 // returns nothing
 async function refreshAttempts(username,forceRefresh = false) {
-    const client = new MongoClient(uri);
     const projection = {_id: 0, email: 0, security: 0, accountType: 0};
-    try {
-        await client.connect();
 
-        const db = client.db(databaseName);
-        const coll = db.collection(userColl);
-
-        const result = await coll.findOne({username: username},projection);
-        if(!result){
-            console.log(`No user with username ${username}`);
-            return;
-        }
-        if(result.loginRefresh < new Date() || forceRefresh){
-            await coll.updateOne({username: username},{ $set: {loginAttempts: loginAttempts}});
-        }
+    const result = await db.collection(userColl).findOne({username: username},projection);
+    if(!result){
+        console.log(`No user with username ${username}`);
         return;
-    } catch (error) {
-        console.error("Database error: ", error);
-    } finally {
-        await client.close();
     }
+    if(result.loginRefresh < new Date() || forceRefresh){
+        await db.collection(userColl).updateOne({username: username},{ $set: {loginAttempts: loginAttempts}});
+    }
+    return;
 }
 
 // checkLock
 // takes a username
 // returns lock if account exists
 async function checkLock(username) {
-    const client = new MongoClient(uri);
     const projection = {_id: 0, email: 0, security: 0, accountType: 0};
-    try {
-        await client.connect();
 
-        const db = client.db(databaseName);
-        const coll = db.collection(userColl);
-
-        const result = await coll.findOne({username: username},projection);
-        if(!result){
-            console.log(`No user with username ${username}`);
-            return;
-        }
-        return result.lock;
-    } catch (error) {
-        console.error("Database error: ", error);
-    } finally {
-        await client.close();
+    const result = await db.collection(userColl).findOne({username: username},projection);
+    if(!result){
+        console.log(`No user with username ${username}`);
+        return;
     }
+    return result.lock;
 }
-
-//
-
