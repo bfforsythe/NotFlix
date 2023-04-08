@@ -8,7 +8,7 @@ const session = require('express-session');
 const databaseName = "Notflix";
 const userColl = "fortnite";
 const movieColl = "movies";
-//const genres = ["Action","Horror","Romance"];
+const genreColl = "genres";
 const PORT = 5000;
 const loginAttempts = 3;
 const loginRefreshMin = 60;
@@ -414,7 +414,7 @@ async function checkLock(username) {
 // takes nothing
 // returns genre array from genreList mongodb object
 async function getGenres(){
-    const result = await db.collection(movieColl).findOne({name:"genreList"});
+    const result = await db.collection(genreColl).findOne({name:"genreList"});
     if(result){
         return result.genres;
     }
@@ -426,6 +426,6 @@ async function getGenres(){
 // adds genre name string to genreList object in mongodb
 // returns nothing
 async function addGenre(genreName){
-    await db.collection(movieColl).updateOne({name:"genreList"},{$push:{genres:genreName}},{upsert:true});
+    await db.collection(genreColl).updateOne({name:"genreList"},{$push:{genres:genreName}},{upsert:true});
     return; 
 }
