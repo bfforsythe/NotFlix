@@ -23,6 +23,14 @@
       <input type="text" id="search"></input>
       <button type="submit" onclick="searchMovies()"> Search</button>
       <button type="submit" onclick="searchInput.value = ''; searchMovies()"> Clear </button>
+      
+      <div class="dropdown">
+        <button class="dropbtn">Genre Search</button>
+        <div class="dropdown-content">
+          <% for (const genre in genres) {%>
+          <a onclick="fliterSlides('<%= genre %>')"><%= genre %></a><% } %>
+        </div>
+      </div>
       </center>
     <div id="search-results"></div>
 
@@ -118,12 +126,7 @@ var searchInput = document.getElementById("search");
     }
     </script>
 
-<!-- Begin Slideshow Containers
-            Brandon Forsythe, 2023
 
-      All containers will initialize 100 empty spots to be filled by functions below
-      and will display 4 elements at a time, controlled by the arrows on each side of slides.
---> 
   <div>
     <% var currIndex = 0; %>
     <% for (const genre in genres) {%>
@@ -155,6 +158,22 @@ var searchInput = document.getElementById("search");
         eval('<%= "slideshow" + currIndex %>' + '.currentSlideIndex = 1;');
         showSlides(eval('<%= "slideshow" + currIndex %>' + '.currentSlideIndex'), eval('slideshow' + currSlidesIndex));
         }
+
+// function filterSlides
+// ----------------------
+// using the value of the dropdown above,
+// hide all other slides aside from the one wanted
+
+        function fliterSlides(genreName) {
+        var filterResult = document.getElementById(genreName + "-slides");
+        var slideshowContainers = document.getElementsByClassName("slideshow-container");
+        for (let i = 0; i < slideshowContainers.length; i++) {
+          if (slideshowContainers[i] !== filterResult) {
+            slideshowContainers[i].style.display = "none";
+          }
+        }
+        filterResult.style.display = "block";
+      }
       </script>
 
       <% currIndex++ %>
